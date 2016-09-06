@@ -241,6 +241,7 @@
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\PlacesController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -248,6 +249,10 @@
     <Compile Include="Migrations\201609061942203_InitialCreate.cs" />
     <Compile Include="Migrations\201609061942203_InitialCreate.Designer.cs">
       <DependentUpon>201609061942203_InitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201609062014294_Column_Place_Name.cs" />
+    <Compile Include="Migrations\201609062014294_Column_Place_Name.Designer.cs">
+      <DependentUpon>201609062014294_Column_Place_Name.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
@@ -339,6 +344,11 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Service References\Application Insights\ConnectedService.json" />
+    <Content Include="Views\Places\Create.cshtml" />
+    <Content Include="Views\Places\Delete.cshtml" />
+    <Content Include="Views\Places\Details.cshtml" />
+    <Content Include="Views\Places\Edit.cshtml" />
+    <Content Include="Views\Places\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -357,6 +367,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201609061942203_InitialCreate.resx">
       <DependentUpon>201609061942203_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201609062014294_Column_Place_Name.resx">
+      <DependentUpon>201609062014294_Column_Place_Name.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

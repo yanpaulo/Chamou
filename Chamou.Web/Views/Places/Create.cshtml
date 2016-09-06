@@ -1,0 +1,99 @@
+﻿@model Chamou.Web.Models.Entities.Place
+
+@{
+    ViewBag.Title = "Cadastro";
+}
+
+<h2>Cadastro</h2>
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label col-md-2"> Local</label>
+            <div class="col-md-10">
+                <div id="searchBoxContainer"><input type="text" id="searchBox" class="form-control" /></div>
+                <div id="myMap" style='position:relative;width:600px;height:400px;'></div>
+            </div>
+            
+            
+        </div>
+
+        
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-default" onclick="return false;" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script type='text/javascript' src='//www.bing.com/api/maps/mapcontrol?callback=GetMap' async defer></script>
+    <script type="text/javascript">
+        function GetMap() {
+            var map = new Microsoft.Maps.Map(document.getElementById('myMap'), {
+                credentials: 'ApMPiz4KL7I8sfGR8TJpoRB6AeO3xMUq7cdofyut0FXJv0gWXGCiYbxtGypC0sCq',
+                center: new Microsoft.Maps.Location(-3.71841, -38.542881),
+                zoom: 12
+            });
+            Microsoft.Maps.loadModule('Microsoft.Maps.DrawingTools', function () {
+                var tools = new Microsoft.Maps.DrawingTools(map);
+                tools.showDrawingManager(function (manager) {
+                    
+                    manager.drawingStarted.add(function () {  });
+                    manager.drawingEnded.add(function () {
+
+                        var list = manager.getPrimitives();
+                        var item = list[list.length - 1];
+                        if (item instanceof Microsoft.Maps.Polygon) {
+                            if (list.length > 1) {
+                                manager.setPrimitives([item]);
+                            }
+                            var locations = item.getLocations();
+                            for (var i = 0; i < locations.length; i++) {
+                                alert(locations[i].toString());
+                            }
+                        }
+                        else {
+                            manager.remove(item);
+                        }
+                    });
+                    manager.drawingErased.add(function () {  });
+                });
+            });
+
+            Microsoft.Maps.loadModule('Microsoft.Maps.AutoSuggest', function () {
+                var options = {
+                    maxResults: 4,
+                    map: map
+                };
+                var manager = new Microsoft.Maps.AutosuggestManager(options);
+                manager.attachAutosuggest('#searchBox', '#searchBoxContainer', selectedSuggestion);
+            });
+            function selectedSuggestion(suggestionResult) {
+                map.setView({ bounds: suggestionResult.bestView });
+            }
+
+        }
+    </script>
+}
