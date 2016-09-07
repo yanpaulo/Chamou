@@ -45,17 +45,19 @@ namespace Chamou.Web.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Location,CenterLatitude,CenterLongitude")] Place place)
+        //[ValidateAntiForgeryToken]
+        public ActionResult Create([Bind(Include = "Id,Name,CenterLatitude,CenterLongitude,LocationPoints")] Place place)
         {
             if (ModelState.IsValid)
             {
                 db.Places.Add(place);
+
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
+            Response.TrySkipIisCustomErrors = true;
 
-            return View(place);
+            return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
         }
 
         // GET: Places/Edit/5
