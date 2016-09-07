@@ -9,10 +9,11 @@
 
     self.centerLongitude = null;
 
+    self.locationWellKnownText = null;
+
     self.submit = function () {
         if (self.locationPoints.length > 0) {
-            var data = self.toJson();
-            $.post(Places.action('Create'), data, function () {
+            $.post(Places.action('Create'), self.toJson(), function () {
                 window.location.href = Places.action('');
             }).error(function (xq) { alert(xq.responseText); });
         }
@@ -24,10 +25,19 @@
     self.toJson = function () {
         return {
             name: self.name(),
-            CenterLatitude: self.centerLatitude.toString().replace(".", ","),
-            CenterLongitude: self.centerLongitude.toString().replace(".", ","),
-            locationPoints: self.locationPoints
+            centerLatitude: self.centerLatitude.toString().replace(".", ","),
+            centerLongitude: self.centerLongitude.toString().replace(".", ","),
+            locationWellKnownText: self.locationWellKnownText,
+            locationPoints: $.map(self.locationPoints, function (item) {
+                return {
+                    latitude: item.latitude.toString().replace(".", ","),
+                    longitude: item.longitude.toString().replace(".", ",")
+                };
+            //map callback
+            })
+        //object
         };
+    //function
     }
 }
 

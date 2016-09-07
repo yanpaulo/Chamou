@@ -11,7 +11,7 @@ function GetMap() {
         center: new Microsoft.Maps.Location(-3.71841, -38.542881),
         zoom: 12
     });
-    Microsoft.Maps.loadModule(['Microsoft.Maps.SpatialMath', 'Microsoft.Maps.DrawingTools'], function () {
+    Microsoft.Maps.loadModule(['Microsoft.Maps.SpatialMath', 'Microsoft.Maps.DrawingTools', 'Microsoft.Maps.WellKnownText'], function () {
         var tools = new Microsoft.Maps.DrawingTools(map);
         tools.showDrawingManager(function (manager) {
 
@@ -24,14 +24,19 @@ function GetMap() {
                     if (list.length > 1) {
                         manager.setPrimitives([item]);
                     }
-
+                    
                     var locations = item.getLocations();
+                    locations.push(locations[0]);
+                    item.setLocations(locations);
                     var viewModel = Places.viewModel;
                     var centroid = Microsoft.Maps.SpatialMath.Geometry.centroid(new Microsoft.Maps.Polygon(item.getLocations()));
                     
                     viewModel.locationPoints = [];
                     viewModel.centerLatitude = centroid.latitude;
                     viewModel.centerLongitude = centroid.longitude;
+                    
+                    viewModel.locationWellKnownText = Microsoft.Maps.WellKnownText.write(item);
+
                     for (var i = 0; i < locations.length; i++) {
                         viewModel.locationPoints.push(new GeoLocationPointViewModel(locations[i]));
                     }

@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using Chamou.Web.Models.Entities;
+using System.Data.Entity.Spatial;
 
 namespace Chamou.Web.Controllers
 {
@@ -46,8 +47,11 @@ namespace Chamou.Web.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         //[ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Name,CenterLatitude,CenterLongitude,LocationPoints")] Place place)
+        public ActionResult Create([Bind(Include = "Id,Name,Location,CenterLatitude,CenterLongitude,LocationPoints")] Place place, string locationWellKnownText)
         {
+            ModelState.Remove("Location");
+            place.Location = DbGeography.FromText(locationWellKnownText);
+            
             if (ModelState.IsValid)
             {
                 db.Places.Add(place);
