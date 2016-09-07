@@ -21,6 +21,9 @@ function GetMap() {
                 var list = manager.getPrimitives();
                 var item = list[list.length - 1];
                 if (item instanceof Microsoft.Maps.Polygon) {
+                    var viewModel = Places.viewModel;
+                    //Started changing location stuff. Set isLocationSet to false.
+                    viewModel.isLocationSet(false);
                     if (list.length > 1) {
                         manager.setPrimitives([item]);
                     }
@@ -28,24 +31,30 @@ function GetMap() {
                     var locations = item.getLocations();
                     locations.push(locations[0]);
                     item.setLocations(locations);
-                    var viewModel = Places.viewModel;
+
                     var centroid = Microsoft.Maps.SpatialMath.Geometry.centroid(new Microsoft.Maps.Polygon(item.getLocations()));
                     
                     viewModel.locationPoints = [];
                     viewModel.centerLatitude = centroid.latitude;
                     viewModel.centerLongitude = centroid.longitude;
-                    
                     viewModel.locationWellKnownText = Microsoft.Maps.WellKnownText.write(item);
 
                     for (var i = 0; i < locations.length; i++) {
                         viewModel.locationPoints.push(new GeoLocationPointViewModel(locations[i]));
                     }
+                    
+                    //Started changing location stuff. Set isLocationSet to true, so that validation will pass.
+                    viewModel.isLocationSet(true);
                 }
                 else {
                     manager.remove(item);
                 }
             });
-            manager.drawingErased.add(function () { });
+            manager.drawingErased.add(function () {
+                if (manager.getPrimitives().length == 0) {
+                    Places.viewModel.isLocationSet(false);
+                }
+            });
         });
     });
 

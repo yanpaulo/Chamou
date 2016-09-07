@@ -11,14 +11,30 @@
 
     self.locationWellKnownText = null;
 
-    self.submit = function () {
-        if (self.locationPoints.length > 0) {
-            $.post(Places.action('Create'), self.toJson(), function () {
-                window.location.href = Places.action('');
-            }).error(function (xq) { alert(xq.responseText); });
+    self.mapValidationMessage = ko.observable();
+
+    self.isLocationSet = ko.observable(false);
+    self.isLocationSet.subscribe(function (newValue) {
+        if (newValue) {
+            self.mapValidationMessage(null);
         }
-        else {
-            alert("Selecione o local");
+    });
+
+    self.submit = function (formElement) {
+
+        if ($(formElement).valid()) {
+            //Separated var because other validation rules may apply.
+            var mapValid = true;
+            if (!self.isLocationSet()) {
+                self.mapValidationMessage('Selecione o local');
+                mapValid = false;
+            }
+
+            if (mapValid) {
+                $.post(formElement.action, self.toJson(), function () {
+                    window.location = Places.action('');
+                }).error(function (xq) { alert(xq.responseText); });
+            }
         }
     }
 
