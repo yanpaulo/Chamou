@@ -34,6 +34,7 @@ namespace Chamou.Web.Controllers
             {
                 return HttpNotFound();
             }
+            ViewBag.__Data = JsonConvert.SerializeObject(place);
             return View(place);
         }
 

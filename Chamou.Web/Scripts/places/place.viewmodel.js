@@ -1,4 +1,11 @@
-﻿function PlaceViewModel(data) {
+﻿var Places = {
+    viewModel: null,
+    action: function (name) {
+        return '/Places/' + name;
+    }
+};
+
+function PlaceViewModel(data) {
     var self = this;
     
     self.id = data.Id;

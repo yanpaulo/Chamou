@@ -1,42 +1,61 @@
 ﻿@model Chamou.Web.Models.Entities.Place
 
 @{
-    ViewBag.Title = "Details";
+    ViewBag.Title = "Detalhes";
 }
+@Html.Hidden("JsonData", ViewBag.__Data as string)
 
-<h2>Details</h2>
+<h2>Detalhes</h2>
 
 <div>
-    <h4>Place</h4>
+    <h4>Lugar</h4>
     <hr />
-    <dl class="dl-horizontal">
+    <dl class="dl-horizontal col-md-8">
         <dt>
-            @Html.DisplayNameFor(model => model.Location)
+            @Html.DisplayNameFor(model => model.Name)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Location)
+            @Html.DisplayFor(model => model.Name)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.CenterLatitude)
+            Mapa
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.CenterLatitude)
+            <div id="myMap" style='position:relative;width:500px;height:350px;'></div>
         </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.CenterLongitude)
-        </dt>
-
         <dd>
-            @Html.DisplayFor(model => model.CenterLongitude)
+            @Html.ActionLink("Editar", "Edit", new { id = Model.Id }) |
+            @Html.ActionLink("Voltar à Lista", "Index")
         </dd>
 
     </dl>
+    <div class="col-md-4">
+        <dl>
+            <dt>
+                @Html.DisplayNameFor(model => model.Location)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Location)
+            </dd>
+        </dl>
+    </div>
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Editar", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Voltar à Lista", "Index")
 </p>
+
+@section Scripts {
+    <script type="text/javascript" src="~/Scripts/knockout-3.4.0.js"></script>
+
+    <script type="text/javascript" src="~/Scripts/places/place.viewmodel.js"></script>
+    <script type="text/javascript" src="~/Scripts/places/_app.js"></script>
+
+    <script type="text/javascript" src="//www.bing.com/api/maps/mapcontrol?callback=GetMap" async defer></script>
+    <script type="text/javascript" src="~/Scripts/places/maps.display-config.js"></script>
+}
