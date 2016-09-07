@@ -1,19 +1,24 @@
-﻿function PlaceViewModel() {
+﻿function PlaceViewModel(data) {
     var self = this;
+    
+    self.id = data.Id;
 
-    self.name = ko.observable();
+    self.name = ko.observable(data.Name);
 
-    self.locationPoints = [];
+    self.locationPoints = data.LocationPoints ? $.map(data.LocationPoints, function (point) {
+        return { latitude: point.Latitude, longitude: point.Longitude };
+    }) : [];
 
-    self.centerLatitude = null;
+    self.centerLatitude = data.CenterLatitude;
 
-    self.centerLongitude = null;
+    self.centerLongitude = data.CenterLongitude;
 
     self.locationWellKnownText = null;
 
     self.mapValidationMessage = ko.observable();
 
     self.isLocationSet = ko.observable(false);
+
     self.isLocationSet.subscribe(function (newValue) {
         if (newValue) {
             self.mapValidationMessage(null);

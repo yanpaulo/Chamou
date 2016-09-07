@@ -6,6 +6,7 @@
 };
 
 function GetMap() {
+    var viewModel = Places.viewModel;
     var map = new Microsoft.Maps.Map(document.getElementById('myMap'), {
         credentials: 'ApMPiz4KL7I8sfGR8TJpoRB6AeO3xMUq7cdofyut0FXJv0gWXGCiYbxtGypC0sCq',
         center: new Microsoft.Maps.Location(-3.71841, -38.542881),
@@ -14,6 +15,18 @@ function GetMap() {
     Microsoft.Maps.loadModule(['Microsoft.Maps.SpatialMath', 'Microsoft.Maps.DrawingTools', 'Microsoft.Maps.WellKnownText'], function () {
         var tools = new Microsoft.Maps.DrawingTools(map);
         tools.showDrawingManager(function (manager) {
+            if (viewModel.locationPoints.length) {
+                manager.add(new Microsoft.Maps.Polygon(
+                    $.map(viewModel.locationPoints, function (p) {
+                        return new Microsoft.Maps.Location(p.latitude, p.longitude);
+                    })
+                ));
+                map.setView({
+                    center: new Microsoft.Maps.Location(viewModel.centerLatitude, viewModel.centerLongitude),
+                    zoom: 18
+                });
+                viewModel.isLocationSet(true);
+            }
 
             manager.drawingStarted.add(function () { });
             manager.drawingEnded.add(function () {
@@ -21,24 +34,24 @@ function GetMap() {
                 var list = manager.getPrimitives();
                 var item = list[list.length - 1];
                 if (item instanceof Microsoft.Maps.Polygon) {
-                    var viewModel = Places.viewModel;
+
                     //Started changing location stuff. Set isLocationSet to false.
                     viewModel.isLocationSet(false);
                     if (list.length > 1) {
                         manager.setPrimitives([item]);
                     }
-                    
+
                     var locations = item.getLocations();
                     locations.push(locations[0]);
                     item.setLocations(locations);
 
                     var centroid = Microsoft.Maps.SpatialMath.Geometry.centroid(new Microsoft.Maps.Polygon(item.getLocations()));
-                    
+
                     viewModel.locationPoints = locations;
                     viewModel.centerLatitude = centroid.latitude;
                     viewModel.centerLongitude = centroid.longitude;
                     viewModel.locationWellKnownText = Microsoft.Maps.WellKnownText.write(item);
-                    
+
                     //Started changing location stuff. Set isLocationSet to true, so that validation will pass.
                     viewModel.isLocationSet(true);
                 }
@@ -69,8 +82,11 @@ function GetMap() {
 }
 
 $(function () {
-    Places.viewModel = new PlaceViewModel();
+    var json = $("#JsonData");
+    var data = json.length ? JSON.parse(json.val()) : {};
+
+    Places.viewModel = new PlaceViewModel(data);
 
     ko.applyBindings(Places.viewModel);
-    
+
 });
