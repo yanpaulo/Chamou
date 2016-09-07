@@ -34,14 +34,10 @@ function GetMap() {
 
                     var centroid = Microsoft.Maps.SpatialMath.Geometry.centroid(new Microsoft.Maps.Polygon(item.getLocations()));
                     
-                    viewModel.locationPoints = [];
+                    viewModel.locationPoints = locations;
                     viewModel.centerLatitude = centroid.latitude;
                     viewModel.centerLongitude = centroid.longitude;
                     viewModel.locationWellKnownText = Microsoft.Maps.WellKnownText.write(item);
-
-                    for (var i = 0; i < locations.length; i++) {
-                        viewModel.locationPoints.push(new GeoLocationPointViewModel(locations[i]));
-                    }
                     
                     //Started changing location stuff. Set isLocationSet to true, so that validation will pass.
                     viewModel.isLocationSet(true);

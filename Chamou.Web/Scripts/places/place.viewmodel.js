@@ -56,11 +56,3 @@
     //function
     }
 }
-
-function GeoLocationPointViewModel(data) {
-    var self = this;
-
-    self.latitude = data.latitude;
-
-    self.longitude = data.longitude;
-}
