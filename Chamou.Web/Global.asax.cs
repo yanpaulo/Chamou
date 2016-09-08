@@ -3,6 +3,7 @@ using Chamou.Web.Models.DTOs;
 using Chamou.Web.Models.Entities;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using System.Web.Http;
@@ -26,6 +27,10 @@ namespace Chamou.Web
                 cfg.CreateMap<Place, PlaceDTO>();
                 cfg.CreateMap<Attendant, AttendantDTO>();
             });
+            if (!System.Diagnostics.Debugger.IsAttached)
+            {
+                Database.SetInitializer(new MigrateDatabaseToLatestVersion<ChamouContext, Migrations.Configuration>());
+            }
             SqlServerTypes.Utilities.LoadNativeAssemblies(Server.MapPath("~/bin"));
         }
     }
