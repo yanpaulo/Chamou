@@ -1,12 +1,12 @@
 ﻿@model Chamou.Web.Models.Entities.Place
 
 @{
-    ViewBag.Title = "Delete";
+    ViewBag.Title = "Excluir";
 }
 
-<h2>Delete</h2>
+<h2>Excluir</h2>
 
-<h3>Are you sure you want to delete this?</h3>
+<h3>Está certo disso? (leia com a voz do Silvio Santos)</h3>
 <div>
     <h4>Place</h4>
     <hr />
@@ -41,8 +41,8 @@
         @Html.AntiForgeryToken()
 
         <div class="form-actions no-color">
-            <input type="submit" value="Delete" class="btn btn-default" /> |
-            @Html.ActionLink("Back to List", "Index")
+            <input type="submit" value="Sim" class="btn btn-default" /> |
+            @Html.ActionLink("Voltar à Lista", "Index")
         </div>
     }
 </div>
