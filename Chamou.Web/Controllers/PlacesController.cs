@@ -9,6 +9,8 @@ using System.Web.Mvc;
 using Chamou.Web.Models.Entities;
 using System.Data.Entity.Spatial;
 using Newtonsoft.Json;
+using Microsoft.SqlServer.Types;
+using System.Data.SqlTypes;
 
 namespace Chamou.Web.Controllers
 {
@@ -52,18 +54,35 @@ namespace Chamou.Web.Controllers
         public ActionResult Create([Bind(Include = "Id,Name,Location,CenterLatitude,CenterLongitude,LocationPoints")] Place place, string locationWellKnownText)
         {
             ModelState.Remove("Location");
-            place.Location = DbGeography.FromText(locationWellKnownText);
-            
+
             if (ModelState.IsValid)
             {
+                //First, get the area defined by the well-known text using left-hand rule
+                var sqlGeography =
+                SqlGeography.STGeomFromText(new SqlChars(locationWellKnownText), DbGeography.DefaultCoordinateSystemId)
+                .MakeValid();
+
+                //Now get the inversion of the above area
+                var invertedSqlGeography = sqlGeography.ReorientObject();
+
+                //Whichever of these is smaller is the enclosed polygon, so we use that one.
+                if (sqlGeography.STArea() > invertedSqlGeography.STArea())
+                {
+                    sqlGeography = invertedSqlGeography;
+                }
+                DbSpatialServices.Default.GeographyFromProviderValue(sqlGeography);
+
+                //AddedLine
+                place.Location = DbGeography.FromText(locationWellKnownText);
+                
                 db.Places.Add(place);
 
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
             Response.TrySkipIisCustomErrors = true;
-
-            return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            Response.StatusCode = (int)HttpStatusCode.BadRequest;
+            return Json(ModelState.Where(ms => ms.Value.Errors.Count > 0).SelectMany(ms => ms.Value.Errors).Select(ms => ms.ErrorMessage));
         }
 
         // GET: Places/Edit/5
