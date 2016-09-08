@@ -15,7 +15,7 @@ namespace Chamou.Web.Models.Entities
         public string Name { get; set; }
 
         [Required]
-        public DbGeography Location { get; set; }
+        public virtual DbGeography Location { get; set; }
         
         public double CenterLatitude { get; set; }
 

@@ -141,6 +141,7 @@ namespace Chamou.Web.Controllers
             {
                 return HttpNotFound();
             }
+
             return View(place);
         }
 
@@ -150,6 +151,7 @@ namespace Chamou.Web.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             Place place = db.Places.Find(id);
+            db.GeoPoints.RemoveRange(place.LocationPoints);
             db.Places.Remove(place);
             db.SaveChanges();
             return RedirectToAction("Index");
