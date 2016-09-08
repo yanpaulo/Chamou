@@ -64,17 +64,16 @@ namespace Chamou.Web.Controllers
 
                 //Now get the inversion of the above area
                 var invertedSqlGeography = sqlGeography.ReorientObject();
-
+                
                 //Whichever of these is smaller is the enclosed polygon, so we use that one.
                 if (sqlGeography.STArea() > invertedSqlGeography.STArea())
                 {
                     sqlGeography = invertedSqlGeography;
                 }
-                DbSpatialServices.Default.GeographyFromProviderValue(sqlGeography);
 
                 //AddedLine
-                place.Location = DbGeography.FromText(locationWellKnownText);
-                
+                place.Location = DbSpatialServices.Default.GeographyFromProviderValue(sqlGeography);
+
                 db.Places.Add(place);
 
                 db.SaveChanges();

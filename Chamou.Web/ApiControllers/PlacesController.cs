@@ -49,7 +49,7 @@ namespace Chamou.Web.ApiControllers
         [Route("api/Places/ByCoordinates/")]
         public IHttpActionResult GetByCoordinates(double latitude, double longitude)
         {
-            var geoPoint = DbGeography.FromText($"POINT ({GeoFormat(latitude)} {GeoFormat(longitude)})");
+            var geoPoint = DbGeography.FromText($"POINT ({GeoFormat(longitude)} {GeoFormat(latitude)})");
             var place = db.Places.FirstOrDefault(p => p.Location.Intersects(geoPoint));
             if (place == null)
             {
