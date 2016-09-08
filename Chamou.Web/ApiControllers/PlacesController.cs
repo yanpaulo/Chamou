@@ -46,6 +46,12 @@ namespace Chamou.Web.ApiControllers
             return Ok(place);
         }
 
+        /// <summary>
+        /// Returns the Place which location encloses the specified point.
+        /// </summary>
+        /// <param name="latitude">Latitude for the point</param>
+        /// <param name="longitude">Longitude for the point</param>
+        /// <returns>Place, if it is found. Null otherwise.</returns>
         [Route("api/Places/ByCoordinates/")]
         public IHttpActionResult GetByCoordinates(double latitude, double longitude)
         {

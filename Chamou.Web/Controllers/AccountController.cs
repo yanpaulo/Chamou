@@ -16,11 +16,13 @@ using Microsoft.Owin.Security.OAuth;
 using Chamou.Web.Models;
 using Chamou.Web.Providers;
 using Chamou.Web.Results;
+using System.Web.Http.Description;
 
 namespace Chamou.Web.Controllers
 {
     [Authorize]
     [RoutePrefix("api/Account")]
+    [ApiExplorerSettings(IgnoreApi = true)]
     public class AccountController : ApiController
     {
         private const string LocalLoginProvider = "Local";
