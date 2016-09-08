@@ -9,6 +9,6 @@
     Loaded="Page_Loaded">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-
+        <ProgressRing Width="64" Height="64" IsActive="True"></ProgressRing>
     </Grid>
 </Page>

@@ -46,8 +46,9 @@ namespace Chamou.WindowsApp.Models
             JsonConvert.DeserializeObject<IEnumerable<Place>>(await GetStringData(Action("")));
 
         public static async Task<Place> GetPlaceByCoordinates(double latitude, double longitude) =>
-            JsonConvert.DeserializeObject<Place>(
-                await GetStringData(Action($"ByCoordinates?Latitude={latitude}&Longitude={longitude}")));
+        JsonConvert.DeserializeObject<Place>(
+            await GetStringData(Action($"ByCoordinates?Latitude={FormatDouble(latitude)}&Longitude={FormatDouble(longitude)}")));
+            
 
         
     }
