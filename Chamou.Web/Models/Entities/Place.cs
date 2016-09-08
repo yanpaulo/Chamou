@@ -23,5 +23,7 @@ namespace Chamou.Web.Models.Entities
 
         public virtual ICollection<GeoPoint> LocationPoints { get; set; }
 
+        public virtual ICollection<Attendant> Attendants { get; set; }
+
     }
 }

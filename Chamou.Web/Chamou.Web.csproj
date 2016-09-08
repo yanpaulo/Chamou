@@ -261,9 +261,14 @@
     <Compile Include="Migrations\201609062014294_Column_Place_Name.Designer.cs">
       <DependentUpon>201609062014294_Column_Place_Name.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201609082245012_Create_Attendant.cs" />
+    <Compile Include="Migrations\201609082245012_Create_Attendant.Designer.cs">
+      <DependentUpon>201609082245012_Create_Attendant.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\Entities\Attendant.cs" />
     <Compile Include="Models\Entities\ChamouContext.cs" />
     <Compile Include="Models\Entities\GeoPoint.cs" />
     <Compile Include="Models\Entities\Place.cs" />
@@ -381,6 +386,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201609062014294_Column_Place_Name.resx">
       <DependentUpon>201609062014294_Column_Place_Name.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201609082245012_Create_Attendant.resx">
+      <DependentUpon>201609082245012_Create_Attendant.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

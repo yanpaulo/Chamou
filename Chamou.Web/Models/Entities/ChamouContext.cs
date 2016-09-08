@@ -23,6 +23,8 @@ namespace Chamou.Web.Models.Entities
         public virtual DbSet<Place> Places { get; set; }
 
         public virtual DbSet<GeoPoint> GeoPoints { get; set; }
+
+        public virtual DbSet<Attendant> Attendants { get; set; }
     }
     
 }
