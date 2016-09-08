@@ -1,4 +1,7 @@
-﻿using System;
+﻿using AutoMapper;
+using Chamou.Web.Models.DTOs;
+using Chamou.Web.Models.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -19,6 +22,10 @@ namespace Chamou.Web
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
+            Mapper.Initialize(cfg => {
+                cfg.CreateMap<Place, PlaceDTO>();
+                cfg.CreateMap<Attendant, AttendantDTO>();
+            });
             SqlServerTypes.Utilities.LoadNativeAssemblies(Server.MapPath("~/bin"));
         }
     }

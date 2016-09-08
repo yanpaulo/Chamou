@@ -11,6 +11,8 @@ using System.Data.Entity.Spatial;
 using Newtonsoft.Json;
 using Microsoft.SqlServer.Types;
 using System.Data.SqlTypes;
+using AutoMapper;
+using Chamou.Web.Models.DTOs;
 
 namespace Chamou.Web.Controllers
 {
@@ -96,7 +98,7 @@ namespace Chamou.Web.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.__Data = JsonConvert.SerializeObject(place);
+            ViewBag.__Data = JsonConvert.SerializeObject(Mapper.Map<PlaceDTO>(place));
             return View(place);
         }
 

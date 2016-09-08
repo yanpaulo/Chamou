@@ -11,6 +11,8 @@ using System.Web.Http.Description;
 using Chamou.Web.Models.Entities;
 using System.Data.Entity.Spatial;
 using System.Data.Entity.SqlServer;
+using AutoMapper;
+using Chamou.Web.Models.DTOs;
 
 namespace Chamou.Web.ApiControllers
 {
@@ -23,9 +25,9 @@ namespace Chamou.Web.ApiControllers
         /// Returns a list of all available Places
         /// </summary>
         /// <returns></returns>
-        public IQueryable<Place> GetPlaces()
+        public IEnumerable<PlaceDTO> GetPlaces()
         {
-            return db.Places;
+            return db.Places.ToList().Select(p => Mapper.Map<PlaceDTO>(p));
         }
 
         // GET: api/Places/5
@@ -43,7 +45,7 @@ namespace Chamou.Web.ApiControllers
                 return NotFound();
             }
 
-            return Ok(place);
+            return Ok(Mapper.Map<PlaceDTO>(place));
         }
 
         /// <summary>
@@ -62,7 +64,7 @@ namespace Chamou.Web.ApiControllers
                 return Ok();
             }
 
-            return Ok(place);
+            return Ok(Mapper.Map<PlaceDTO>(place));
         }
 
         // PUT: api/Places/5
