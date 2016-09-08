@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using Chamou.Web.Models.Entities;
 using System.Data.Entity.Spatial;
+using Newtonsoft.Json;
 
 namespace Chamou.Web.Controllers
 {
@@ -33,6 +34,7 @@ namespace Chamou.Web.Controllers
             {
                 return HttpNotFound();
             }
+            ViewBag.__Data = JsonConvert.SerializeObject(place);
             return View(place);
         }
 
@@ -76,6 +78,7 @@ namespace Chamou.Web.Controllers
             {
                 return HttpNotFound();
             }
+            ViewBag.__Data = JsonConvert.SerializeObject(place);
             return View(place);
         }
 
@@ -83,16 +86,29 @@ namespace Chamou.Web.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Location,CenterLatitude,CenterLongitude")] Place place)
+        //[ValidateAntiForgeryToken]
+        public ActionResult Edit([Bind(Include = "Id,Name,Location,CenterLatitude,CenterLongitude,LocationPoints")] Place model, string locationWellKnownText)
         {
+            ModelState.Remove("Location");
             if (ModelState.IsValid)
             {
-                db.Entry(place).State = EntityState.Modified;
+                var place = db.Places.Find(model.Id);
+                place.Name = model.Name;
+                if (!string.IsNullOrWhiteSpace(locationWellKnownText))
+                {
+                    db.GeoPoints.RemoveRange(place.LocationPoints);
+                    place.Location = DbGeography.FromText(locationWellKnownText);
+                    place.CenterLatitude = model.CenterLatitude;
+                    place.CenterLongitude = model.CenterLongitude;
+                    model.LocationPoints.ToList().ForEach(p => place.LocationPoints.Add(p));
+                }
+                //db.Entry(model).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return new HttpStatusCodeResult(HttpStatusCode.OK);
             }
-            return View(place);
+            Response.TrySkipIisCustomErrors = true;
+
+            return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
         }
 
         // GET: Places/Delete/5

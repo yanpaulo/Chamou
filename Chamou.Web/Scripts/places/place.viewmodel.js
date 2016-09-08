@@ -1,24 +1,52 @@
-﻿function PlaceViewModel() {
+﻿var Places = {
+    viewModel: null,
+    action: function (name) {
+        return '/Places/' + name;
+    }
+};
+
+function PlaceViewModel(data) {
     var self = this;
+    
+    self.id = data.Id;
 
-    self.name = ko.observable();
+    self.name = ko.observable(data.Name);
 
-    self.locationPoints = [];
+    self.locationPoints = data.LocationPoints ? $.map(data.LocationPoints, function (point) {
+        return { latitude: point.Latitude, longitude: point.Longitude };
+    }) : [];
 
-    self.centerLatitude = null;
+    self.centerLatitude = data.CenterLatitude;
 
-    self.centerLongitude = null;
+    self.centerLongitude = data.CenterLongitude;
 
     self.locationWellKnownText = null;
 
-    self.submit = function () {
-        if (self.locationPoints.length > 0) {
-            $.post(Places.action('Create'), self.toJson(), function () {
-                window.location.href = Places.action('');
-            }).error(function (xq) { alert(xq.responseText); });
+    self.mapValidationMessage = ko.observable();
+
+    self.isLocationSet = ko.observable(false);
+
+    self.isLocationSet.subscribe(function (newValue) {
+        if (newValue) {
+            self.mapValidationMessage(null);
         }
-        else {
-            alert("Selecione o local");
+    });
+
+    self.submit = function (formElement) {
+
+        if ($(formElement).valid()) {
+            //Separated var because other validation rules may apply.
+            var mapValid = true;
+            if (!self.isLocationSet()) {
+                self.mapValidationMessage('Selecione o local');
+                mapValid = false;
+            }
+
+            if (mapValid) {
+                $.post(formElement.action, self.toJson(), function () {
+                    window.location = Places.action('');
+                }).error(function (xq) { alert(xq.responseText); });
+            }
         }
     }
 
@@ -39,12 +67,4 @@
         };
     //function
     }
-}
-
-function GeoLocationPointViewModel(data) {
-    var self = this;
-
-    self.latitude = data.latitude;
-
-    self.longitude = data.longitude;
 }
