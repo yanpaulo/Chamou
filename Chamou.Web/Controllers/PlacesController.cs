@@ -153,6 +153,7 @@ namespace Chamou.Web.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             Place place = db.Places.Find(id);
+            db.Attendants.RemoveRange(place.Attendants);
             db.GeoPoints.RemoveRange(place.LocationPoints);
             db.Places.Remove(place);
             db.SaveChanges();
