@@ -7,15 +7,15 @@ using System.Threading.Tasks;
 
 namespace Chamou.TcpProxy
 {
-    public class TcpManager
+    public class ClientManager
     {
         private Dictionary<int, TcpClient> clients = new Dictionary<int, TcpClient>();
-        private static TcpManager _instance;
+        private static ClientManager _instance;
 
-        private TcpManager() { }
+        private ClientManager() { }
 
-        public static TcpManager Instance =>
-            _instance ?? (_instance = new TcpManager());
+        public static ClientManager Instance =>
+            _instance ?? (_instance = new ClientManager());
 
         internal void AddClient(TcpClient client, int clientId)
         {
