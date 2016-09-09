@@ -32,7 +32,7 @@ namespace Chamou.Web
                 Database.SetInitializer(new MigrateDatabaseToLatestVersion<ChamouContext, Migrations.Configuration>());
             }
             SqlServerTypes.Utilities.LoadNativeAssemblies(Server.MapPath("~/bin"));
-            Tcp.TcpManagerConfig.Initialize();
+            //Tcp.TcpManagerConfig.Initialize();
         }
     }
 }
