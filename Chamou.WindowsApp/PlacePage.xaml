@@ -28,12 +28,18 @@
                 <TextBlock Style="{ThemeResource TitleTextBlockStyle}" Margin="0,0,8,0">Você está em: </TextBlock>
                 <TextBlock Style="{ThemeResource TitleTextBlockStyle}" Foreground="{ThemeResource SystemControlForegroundAccentBrush}" Text="{Binding Name}"></TextBlock>
             </StackPanel>
-            <StackPanel Margin="8">
+            <StackPanel HorizontalAlignment="Stretch" Margin="8">
                 <TextBlock Margin="4" Style="{ThemeResource SubtitleTextBlockStyle}">Funcionários:</TextBlock>
-                <TextBlock Margin="4">Zé</TextBlock>
-                <TextBlock Margin="4">Chiquin</TextBlock>
-                <TextBlock Margin="4">Totoin</TextBlock>
-                <TextBlock Margin="4">Manel</TextBlock>
+                <ListView HorizontalAlignment="Stretch" ItemsSource="{Binding Attendants}">
+                    <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Margin="4" Text="{Binding Name}"></TextBlock>
+                            <Button>Chamar</Button>
+                        </StackPanel>
+                    </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
             </StackPanel>
         </StackPanel>
         

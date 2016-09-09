@@ -16,5 +16,7 @@ namespace Chamou.WindowsApp.Models
 
         public virtual ICollection<GeoPoint> LocationPoints { get; set; }
 
+        public virtual ICollection<Attendant> Attendants { get; set; }
+
     }
 }
