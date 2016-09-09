@@ -2,18 +2,20 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Sockets;
-using System.Web;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace Chamou.Web.Tcp
+namespace Chamou.TcpProxy
 {
     public class TcpManager
     {
         private Dictionary<int, TcpClient> clients = new Dictionary<int, TcpClient>();
+        private static TcpManager _instance;
 
-        internal TcpManager() {  }
+        private TcpManager() { }
 
-        public static TcpManager Instance => 
-            HttpContext.Current.Application[TcpManagerConfig.AppKey] as TcpManager;
+        public static TcpManager Instance =>
+            _instance ?? (_instance = new TcpManager());
 
         internal void AddClient(TcpClient client, int clientId)
         {

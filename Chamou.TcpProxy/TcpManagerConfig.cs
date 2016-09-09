@@ -1,29 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
+using System.Text;
 using System.Threading;
-using System.Web;
+using System.Threading.Tasks;
 
-namespace Chamou.Web.Tcp
+namespace Chamou.TcpProxy
 {
     public class TcpManagerConfig
     {
-        internal static string AppKey = "TCP_SERVER";
         public static void Initialize()
         {
-            TcpManager tcpManager = HttpContext.Current.Application[AppKey] as TcpManager;
-            if (tcpManager == null)
-            {
-                tcpManager = new TcpManager();
-                HttpContext.Current.Application[AppKey] = tcpManager;
-            }
+            TcpManager tcpManager = TcpManager.Instance;
             Thread t = new Thread(() =>
             {
                 int port = 13000;
-                IPAddress localAddr = IPAddress.Parse("127.0.0.1");
+                IPAddress localAddr = IPAddress.Loopback;
 
                 // TcpListener server = new TcpListener(port);
                 TcpListener listener = null;
@@ -48,7 +42,7 @@ namespace Chamou.Web.Tcp
                         // Perform a blocking call to accept requests.
                         // You could also user server.AcceptSocket() here.
                         TcpClient client = listener.AcceptTcpClient();
-                        Debug.WriteLine("Connected!");
+                        Console.WriteLine("Connected!");
 
                         data = null;
 
@@ -58,21 +52,21 @@ namespace Chamou.Web.Tcp
                         int i = stream.Read(bytes, 0, bytes.Length);
                         // Translate data bytes to a ASCII string.
                         data = System.Text.Encoding.ASCII.GetString(bytes, 0, i);
-                        Debug.WriteLine("Received: {0}", data);
+                        Console.WriteLine("Received: {0}", data);
 
                         // Process the data sent by the client.
                         data = data.ToUpper().Trim();
-                        Debug.WriteLine(data);
+                        Console.WriteLine(data);
                         int clientId = int.Parse(data);
 
                         tcpManager.AddClient(client, clientId);
-                        Debug.WriteLine($"Added client {clientId}");
+                        Console.WriteLine($"Added client {clientId}");
                     }
 
                 }
                 catch (SocketException e)
                 {
-                    Debug.WriteLine("SocketException: {0}", e);
+                    Console.WriteLine("SocketException: {0}", e);
                 }
                 finally
                 {

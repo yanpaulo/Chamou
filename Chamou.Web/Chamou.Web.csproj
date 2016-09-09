@@ -285,8 +285,6 @@
     <Compile Include="Results\ChallengeResult.cs" />
     <Compile Include="SqlServerTypes\Loader.cs" />
     <Compile Include="Startup.cs" />
-    <Compile Include="Tcp\TcpManager.cs" />
-    <Compile Include="Tcp\TcpManagerConfig.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="..\packages\Microsoft.SqlServer.Types.11.0.2\nativeBinaries\x64\msvcr100.dll">
