@@ -19,7 +19,7 @@ namespace Chamou.TcpProxy
             ClientManager tcpManager = ClientManager.Instance;
 
             int devicePort = 13000, servicePort = 13001;
-            IPAddress localAddr = IPAddress.Loopback;
+            IPAddress localAddr = IPAddress.Any;
             
             _deviceThread = new Thread(() =>
             {
