@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Chamou.TcpProxy;
 
-namespace Chamou.TcpProxy
+namespace Chamou.TcpProxyConsole
 {
     class Program
     {

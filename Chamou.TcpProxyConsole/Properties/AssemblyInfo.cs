@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Chamou.TcpProxy")]
+[assembly: AssemblyTitle("Chamou.TcpProxyConsole")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("8ab96a86-c9a1-4cc0-b9ba-7ad0c1dafcfa")]
+[assembly: Guid("7c44c1de-74d8-4f35-a1ca-d0743da73df4")]
 
 // Version information for an assembly consists of the following four values:
 //
