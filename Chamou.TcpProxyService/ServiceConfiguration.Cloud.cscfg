@@ -3,7 +3,7 @@
   <Role name="Chamou.TcpProxyServiceRole">
     <Instances count="1" />
     <ConfigurationSettings>
-      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="UseDevelopmentStorage=true" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="DefaultEndpointsProtocol=https;AccountName=ypushtcp;AccountKey=qDy4NZmtpYwcCd/7RtcQCwXepMb9o+t+idCyX32FhG4wWUvIgm1qFi3hwj4BOnLa6cu73iWeqjnt7ywYKaCafg==" />
     </ConfigurationSettings>
   </Role>
 </ServiceConfiguration>

@@ -1,8 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ServiceDefinition name="Chamou.TcpProxyService" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceDefinition" schemaVersion="2015-04.2.6">
-  <WorkerRole name="Chamou.TcpProxyServiceRole" vmsize="Small">
+  <WorkerRole name="Chamou.TcpProxyServiceRole" vmsize="ExtraSmall">
     <ConfigurationSettings>
       <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" />
     </ConfigurationSettings>
+    <Endpoints>
+      <InputEndpoint name="Devices" protocol="tcp" port="8080" />
+      <InputEndpoint name="Servers" protocol="tcp" port="8081" />
+    </Endpoints>
   </WorkerRole>
 </ServiceDefinition>
