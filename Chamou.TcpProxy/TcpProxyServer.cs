@@ -146,8 +146,20 @@ namespace Chamou.TcpProxy
                             var parts = data.Split(new[] { ';' });
                             int clientId = int.Parse(parts[0]);
                             string message = parts[1];
-                            _tcpManager.SendMessage(clientId, message);
-                            Console.WriteLine($"Sent message {message} to client {clientId}");
+                            string responseMessage;
+                            if (_tcpManager.SendMessage(clientId, message))
+                            {
+                                responseMessage = $"Sent message '{message}' to client {clientId}\r\n";
+                                Console.WriteLine(responseMessage);
+                                await stream.WriteAsync(Encoding.ASCII.GetBytes(responseMessage), 0, responseMessage.Length);
+                            }
+                            else
+                            {
+                                responseMessage = $"Error: Client {clientId} not found\r\n";
+                                Console.WriteLine(responseMessage);
+                                await stream.WriteAsync(Encoding.ASCII.GetBytes(responseMessage), 0, responseMessage.Length);
+                            }
+                            
                         }
                         catch { Console.WriteLine($"Invalid message: {data}"); }
                     }
