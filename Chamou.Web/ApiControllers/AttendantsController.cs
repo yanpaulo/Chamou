@@ -16,13 +16,22 @@ namespace Chamou.Web.ApiControllers
 
         public IHttpActionResult GetAttendant(int id)
         {
+            var buffer = new byte[256];
             var data = $"{id};{new Random().Next(20).ToString()}";
             var client = new TcpClient("ypushtcp.cloudapp.net", 8081);
             var stream = client.GetStream();
+
             stream.Write(Encoding.ASCII.GetBytes(data), 0, data.Length);
+            int i = stream.Read(buffer, 0, buffer.Length);
+            string responseMessage = Encoding.ASCII.GetString(buffer, 0, i);
             client.Close();
 
-            return Ok();
+            if (!responseMessage.ToLower().Contains("erro"))
+            {
+                return Ok(responseMessage);
+            }
+
+            return BadRequest(responseMessage);
         }
     }
 }
