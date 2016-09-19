@@ -41,6 +41,11 @@ namespace Chamou.WindowsApp
             var at = btn.DataContext as Attendant;
             await new MessageDialog(await WebService.CallAttendant(at.Id)).ShowAsync();
         }
+
+        private void RefreshIcon_Click(object sender, RoutedEventArgs e)
+        {
+            Frame.GoBack();
+        }
     }
 
 }

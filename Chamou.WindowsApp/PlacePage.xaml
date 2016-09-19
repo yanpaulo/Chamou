@@ -56,7 +56,7 @@
     </Grid>
     <Page.BottomAppBar>
         <CommandBar>
-            <AppBarButton Icon="Refresh" Label="Atualizar"></AppBarButton>
+            <AppBarButton x:Name="RefreshIcon" Icon="Refresh" Label="Atualizar" Click="RefreshIcon_Click"></AppBarButton>
         </CommandBar>
     </Page.BottomAppBar>
 </Page>
