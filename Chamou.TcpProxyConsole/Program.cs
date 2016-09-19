@@ -12,8 +12,7 @@ namespace Chamou.TcpProxyConsole
         static void Main(string[] args)
         {
             var server = new TcpProxyServer();
-            server.Start();
-            server.Join();
+            server.Run();
         }
     }
 }

@@ -22,9 +22,7 @@ namespace Chamou.TcpProxyServiceRole
         public override void Run()
         {
             Trace.TraceInformation("Chamou.TcpProxyServiceRole is running");
-
-            server.Start();
-            server.Join();
+            server.Run();
 
             //try
             //{

@@ -11,147 +11,155 @@ namespace Chamou.TcpProxy
 {
     public class TcpProxyServer
     {
-        private Thread _deviceThread;
-        private Thread _serviceThread;
+        private ClientManager _tcpManager = ClientManager.Instance;
+        private static readonly int 
+            _devicePort = 8080, _servicePort = 8081;
+        private IPAddress _localAddr = IPAddress.Any;
 
-        public void Start()
+        public void Run()
         {
-            ClientManager tcpManager = ClientManager.Instance;
-            int devicePort = 8080, servicePort = 8081;
-            IPAddress localAddr = IPAddress.Any;
-            
-            _deviceThread = new Thread(() =>
-            {
-                // TcpListener server = new TcpListener(port);
-                TcpListener listener = null;
-                try
-                {
-                    // Set the TcpListener on port 13000.
-                    listener = new TcpListener(localAddr, devicePort);
+            var deviceTask = AcceptClientDevicesAsync();
 
-                    // Start listening for client requests.
-                    listener.Start();
-   
-                    // Enter the listening loop.
-                    while (true)
-                    {
-                        Console.WriteLine("Waiting for a connection... ");
+            var serviceTask = AcceptClientServicesAsync();
 
-                        // Perform a blocking call to accept requests.
-                        // You could also user server.AcceptSocket() here.
-                        TcpClient client = listener.AcceptTcpClient();
-                        Task.Run(() =>
-                        {
-                            // Buffer for reading data
-                            byte[] bytes = new byte[256];
-                            string data = null;
-
-                            Console.WriteLine("Connected!");
-
-                            // Get a stream object for reading and writing
-                            NetworkStream stream = client.GetStream();
-
-                            int i = stream.Read(bytes, 0, bytes.Length);
-                            // Translate data bytes to a ASCII string.
-                            data = Encoding.ASCII.GetString(bytes, 0, i);
-                            Console.WriteLine("Received: {0}", data);
-
-                            // Process the data sent by the client.
-                            data = data.ToUpper().Trim();
-                            Console.WriteLine(data);
-                            try
-                            {
-                                int clientId = int.Parse(data);
-                                tcpManager.AddClient(client, clientId);
-                                Console.WriteLine($"Added client {clientId}");
-                            }
-                            catch { Console.WriteLine($"Invalid message: {data}"); }
-                        });
-                    }
-
-                }
-                catch (SocketException e)
-                {
-                    Console.WriteLine("SocketException: {0}", e);
-                }
-                finally
-                {
-                    // Stop listening for new clients.
-                    listener.Stop();
-                }
-            });
-            
-            _serviceThread = new Thread(() =>
-            {
-                // TcpListener server = new TcpListener(port);
-                TcpListener listener = null;
-                try
-                {
-                    // Set the TcpListener on port 13000.
-                    listener = new TcpListener(localAddr, servicePort);
-
-                    // Start listening for client requests.
-                    listener.Start();
-
-                    // Enter the listening loop.
-                    while (true)
-                    {
-                        Console.Write("Waiting for a connection on Service end... ");
-
-                        // Perform a blocking call to accept requests.
-                        // You could also user server.AcceptSocket() here.
-                        TcpClient client = listener.AcceptTcpClient();
-                        Task.Run(() =>
-                        {
-                            // Buffer for reading data
-                            byte[] bytes = new byte[256];
-                            string data = null;
-
-                            Console.WriteLine("Service Connected!");
-
-                            data = null;
-
-                            // Get a stream object for reading and writing
-                            NetworkStream stream = client.GetStream();
-
-                            int i = stream.Read(bytes, 0, bytes.Length);
-                            // Translate data bytes to a ASCII string.
-                            data = Encoding.ASCII.GetString(bytes, 0, i);
-                            Console.WriteLine("Received from Service: {0}", data);
-                            // Process the data sent by the client.
-                            data = data.Trim();
-                            try
-                            {
-                                var parts = data.Split(new[] { ';' });
-                                int clientId = int.Parse(parts[0]);
-                                string message = parts[1];
-                                tcpManager.SendMessage(clientId, message);
-                                Console.WriteLine($"Sent message {message} to client {clientId}");
-
-                            }
-                            catch { Console.WriteLine($"Invalid message: {data}"); }
-
-                            client.Close();
-                        });
-                    }
-
-                }
-                catch (SocketException e)
-                {
-                    Console.WriteLine("SocketException: {0}", e);
-                }
-                finally
-                {
-                    // Stop listening for new clients.
-                    listener.Stop();
-                }
-            });
-
-            _deviceThread.Start();
-            _serviceThread.Start();
+            Task.WaitAll(deviceTask, serviceTask);
         }
 
-        public void Join() { _deviceThread.Join(); _serviceThread.Join(); }
+        #region Devices Task
+        private async Task AcceptClientDevicesAsync()
+        {
+            TcpListener listener = new TcpListener(_localAddr, _devicePort);
+            try
+            {
+                // Start listening for client requests.
+                listener.Start();
 
+                // Enter the listening loop.
+                while (true)
+                {
+                    Console.WriteLine("Waiting for a connection on Device end... ");
+
+                    var client = await listener.AcceptTcpClientAsync();
+                    HandleClientDeviceAsync(client);
+                }
+
+            }
+            catch (SocketException e)
+            {
+                Console.WriteLine("SocketException: {0}", e);
+            }
+            finally
+            {
+                // Stop listening for new clients.
+                listener.Stop();
+            }
+        }
+
+        private async Task HandleClientDeviceAsync(TcpClient client)
+        {
+            //Buffer for reading data
+            byte[] bytes = new byte[256];
+            string data = null;
+
+            Console.WriteLine("Device Connected!");
+
+            try
+            {
+                NetworkStream stream = client.GetStream();
+
+                int i = await stream.ReadAsync(bytes, 0, bytes.Length);
+                data = Encoding.ASCII.GetString(bytes, 0, i);
+                Console.WriteLine("Received: {0}", data);
+
+                data = data.ToUpper().Trim();
+                try
+                {
+                    int clientId = int.Parse(data);
+                    _tcpManager.AddClient(client, clientId);
+                    Console.WriteLine($"Added client {clientId}");
+                }
+                catch { Console.WriteLine($"Invalid message: {data}"); }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                throw;
+            }
+        } 
+        #endregion
+
+        #region Service Tasks
+
+        private async Task AcceptClientServicesAsync()
+        {
+            // TcpListener server = new TcpListener(port);
+            TcpListener listener = new TcpListener(_localAddr, _servicePort);
+            try
+            {
+                listener.Start();
+
+                // Enter the listening loop.
+                while (true)
+                {
+                    Console.WriteLine("Waiting for a connection on Service end... ");
+
+                    var client = await listener.AcceptTcpClientAsync();
+                    HandleClientServiceAsync(client);
+
+                }
+
+            }
+            catch (SocketException e)
+            {
+                Console.WriteLine("SocketException: {0}", e);
+            }
+            finally
+            {
+                // Stop listening for new clients.
+                listener.Stop();
+            }
+        }
+
+        private async Task HandleClientServiceAsync(TcpClient client)
+        {
+            {
+                // Buffer for reading data
+                byte[] bytes = new byte[256];
+                string data = null;
+                int i;
+
+                Console.WriteLine("Service Connected!");
+                try
+                {
+                    // Get a stream object for reading and writing
+                    NetworkStream stream = client.GetStream();
+
+                    while ((i = await stream.ReadAsync(bytes, 0, bytes.Length)) > 0)
+                    {
+                        // Translate data bytes to a ASCII string.
+                        data = Encoding.ASCII.GetString(bytes, 0, i);
+                        Console.WriteLine("Received from Service: {0}", data);
+                        // Process the data sent by the client Service.
+                        data = data.Trim();
+                        try
+                        {
+                            var parts = data.Split(new[] { ';' });
+                            int clientId = int.Parse(parts[0]);
+                            string message = parts[1];
+                            _tcpManager.SendMessage(clientId, message);
+                            Console.WriteLine($"Sent message {message} to client {clientId}");
+                        }
+                        catch { Console.WriteLine($"Invalid message: {data}"); }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.ToString());
+                    throw;
+                }
+
+            }
+        } 
+        #endregion
     }
 }
