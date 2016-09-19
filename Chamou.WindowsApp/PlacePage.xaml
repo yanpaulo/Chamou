@@ -18,31 +18,41 @@
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Grid.RowDefinitions>
             <RowDefinition Height="80"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
         <TextBlock Grid.Row="0" Margin="12"
                    Style="{ThemeResource HeaderTextBlockStyle}" Foreground="{ThemeResource SystemControlForegroundAccentBrush}"
                    Text="{Binding Name}"></TextBlock>
-        <StackPanel Grid.Row="1" Orientation="Vertical">
+        <StackPanel Grid.Row="1" HorizontalAlignment="Stretch" Orientation="Vertical">
             <StackPanel Margin="12" Orientation="Horizontal">
-                <TextBlock Style="{ThemeResource TitleTextBlockStyle}" Margin="0,0,8,0">Você está em: </TextBlock>
+                <TextBlock Style="{ThemeResource TitleTextBlockStyle}" Margin="0,0,8,0">Você está em:</TextBlock>
                 <TextBlock Style="{ThemeResource TitleTextBlockStyle}" Foreground="{ThemeResource SystemControlForegroundAccentBrush}" Text="{Binding Name}"></TextBlock>
             </StackPanel>
-            <StackPanel HorizontalAlignment="Stretch" Margin="8">
-                <TextBlock Margin="4" Style="{ThemeResource SubtitleTextBlockStyle}">Funcionários:</TextBlock>
-                <ListView HorizontalAlignment="Stretch" ItemsSource="{Binding Attendants}">
-                    <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Margin="4" Text="{Binding Name}"></TextBlock>
-                            <Button>Chamar</Button>
-                        </StackPanel>
-                    </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
-            </StackPanel>
+            <TextBlock Margin="12" Style="{ThemeResource SubtitleTextBlockStyle}">Funcionários:</TextBlock>
         </StackPanel>
-        
+        <ListView Grid.Row="2" SelectionMode="None" IsItemClickEnabled="True" ItemsSource="{Binding Attendants}">
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch"></Setter>
+                </Style>
+            </ListView.ItemContainerStyle>
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Grid BorderBrush="Gray" BorderThickness="0 0 0 1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                            <ColumnDefinition Width="Auto"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Grid.Column="0" Margin="12" Text="{Binding Name}"></TextBlock>
+                        <Button Grid.Column="1" Margin="12">
+                            <SymbolIcon Symbol="People"></SymbolIcon>
+                        </Button>
+                    </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
     </Grid>
     <Page.BottomAppBar>
         <CommandBar>
