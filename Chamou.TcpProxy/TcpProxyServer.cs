@@ -17,7 +17,6 @@ namespace Chamou.TcpProxy
         public void Start()
         {
             ClientManager tcpManager = ClientManager.Instance;
-
             int devicePort = 8080, servicePort = 8081;
             IPAddress localAddr = IPAddress.Any;
             
@@ -32,43 +31,42 @@ namespace Chamou.TcpProxy
 
                     // Start listening for client requests.
                     listener.Start();
-
-                    // Buffer for reading data
-                    byte[] bytes = new byte[256];
-                    string data = null;
-
-
+   
                     // Enter the listening loop.
                     while (true)
                     {
-                        Console.Write("Waiting for a connection... ");
+                        Console.WriteLine("Waiting for a connection... ");
 
                         // Perform a blocking call to accept requests.
                         // You could also user server.AcceptSocket() here.
                         TcpClient client = listener.AcceptTcpClient();
-                        Console.WriteLine("Connected!");
-
-                        data = null;
-
-                        // Get a stream object for reading and writing
-                        NetworkStream stream = client.GetStream();
-
-                        int i = stream.Read(bytes, 0, bytes.Length);
-                        // Translate data bytes to a ASCII string.
-                        data = System.Text.Encoding.ASCII.GetString(bytes, 0, i);
-                        Console.WriteLine("Received: {0}", data);
-
-                        // Process the data sent by the client.
-                        data = data.ToUpper().Trim();
-                        Console.WriteLine(data);
-                        try
+                        Task.Run(() =>
                         {
-                            int clientId = int.Parse(data);
-                            tcpManager.AddClient(client, clientId);
-                            Console.WriteLine($"Added client {clientId}");
-                        }
-                        catch { Console.WriteLine($"Invalid message: {data}"); }
-                        
+                            // Buffer for reading data
+                            byte[] bytes = new byte[256];
+                            string data = null;
+
+                            Console.WriteLine("Connected!");
+
+                            // Get a stream object for reading and writing
+                            NetworkStream stream = client.GetStream();
+
+                            int i = stream.Read(bytes, 0, bytes.Length);
+                            // Translate data bytes to a ASCII string.
+                            data = Encoding.ASCII.GetString(bytes, 0, i);
+                            Console.WriteLine("Received: {0}", data);
+
+                            // Process the data sent by the client.
+                            data = data.ToUpper().Trim();
+                            Console.WriteLine(data);
+                            try
+                            {
+                                int clientId = int.Parse(data);
+                                tcpManager.AddClient(client, clientId);
+                                Console.WriteLine($"Added client {clientId}");
+                            }
+                            catch { Console.WriteLine($"Invalid message: {data}"); }
+                        });
                     }
 
                 }
@@ -95,11 +93,6 @@ namespace Chamou.TcpProxy
                     // Start listening for client requests.
                     listener.Start();
 
-                    // Buffer for reading data
-                    byte[] bytes = new byte[256];
-                    string data = null;
-
-
                     // Enter the listening loop.
                     while (true)
                     {
@@ -108,31 +101,38 @@ namespace Chamou.TcpProxy
                         // Perform a blocking call to accept requests.
                         // You could also user server.AcceptSocket() here.
                         TcpClient client = listener.AcceptTcpClient();
-                        Console.WriteLine("Service Connected!");
-
-                        data = null;
-
-                        // Get a stream object for reading and writing
-                        NetworkStream stream = client.GetStream();
-
-                        int i = stream.Read(bytes, 0, bytes.Length);
-                        // Translate data bytes to a ASCII string.
-                        data = System.Text.Encoding.ASCII.GetString(bytes, 0, i);
-                        Console.WriteLine("Received from Service: {0}", data);
-                        // Process the data sent by the client.
-                        data = data.Trim();
-                        try
+                        Task.Run(() =>
                         {
-                            var parts = data.Split(new[] { ';' });
-                            int clientId = int.Parse(parts[0]);
-                            string message = parts[1];
-                            tcpManager.SendMessage(clientId, message);
-                            Console.WriteLine($"Sent message {message} to client {clientId}");
-                            
-                        }
-                        catch { Console.WriteLine($"Invalid message: {data}"); }
+                            // Buffer for reading data
+                            byte[] bytes = new byte[256];
+                            string data = null;
 
-                        client.Close();
+                            Console.WriteLine("Service Connected!");
+
+                            data = null;
+
+                            // Get a stream object for reading and writing
+                            NetworkStream stream = client.GetStream();
+
+                            int i = stream.Read(bytes, 0, bytes.Length);
+                            // Translate data bytes to a ASCII string.
+                            data = Encoding.ASCII.GetString(bytes, 0, i);
+                            Console.WriteLine("Received from Service: {0}", data);
+                            // Process the data sent by the client.
+                            data = data.Trim();
+                            try
+                            {
+                                var parts = data.Split(new[] { ';' });
+                                int clientId = int.Parse(parts[0]);
+                                string message = parts[1];
+                                tcpManager.SendMessage(clientId, message);
+                                Console.WriteLine($"Sent message {message} to client {clientId}");
+
+                            }
+                            catch { Console.WriteLine($"Invalid message: {data}"); }
+
+                            client.Close();
+                        });
                     }
 
                 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Sockets;
@@ -9,7 +10,7 @@ namespace Chamou.TcpProxy
 {
     public class ClientManager
     {
-        private Dictionary<int, TcpClient> clients = new Dictionary<int, TcpClient>();
+        private ConcurrentDictionary<int, TcpClient> clients = new ConcurrentDictionary<int, TcpClient>();
         private static ClientManager _instance;
 
         private ClientManager() { }
