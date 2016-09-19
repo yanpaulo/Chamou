@@ -33,13 +33,13 @@ namespace Chamou.TcpProxy
 
         public bool SendMessage(int clientId, string data)
         {
-            if (clients.ContainsKey(clientId))
+            TcpClient client;
+            if (clients.TryGetValue(clientId, out client))
             {
-                var client = clients[clientId];
                 if (client.Connected)
                 {
                     var stream = client.GetStream();
-                    var bytes = System.Text.Encoding.ASCII.GetBytes(data);
+                    var bytes = Encoding.ASCII.GetBytes(data);
                     stream.Write(bytes, 0, bytes.Length);
 
                     return true;
