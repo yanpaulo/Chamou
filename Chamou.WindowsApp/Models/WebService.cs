@@ -12,6 +12,19 @@ namespace Chamou.WindowsApp.Models
     {
         private static readonly string rootUrl = "http://chamou.yanscorp.com/api/Places";
 
+
+        public static async Task<IEnumerable<Place>> GetPlaces() =>
+            JsonConvert.DeserializeObject<IEnumerable<Place>>(await GetStringData(Action("")));
+
+        public static async Task<Place> GetPlaceByCoordinates(double latitude, double longitude) =>
+        JsonConvert.DeserializeObject<Place>(
+            await GetStringData(Action($"ByCoordinates?Latitude={FormatDouble(latitude)}&Longitude={FormatDouble(longitude)}")));
+
+        public static async Task<string> CallAttendant(int id) =>
+            await GetStringData($"http://chamou.yanscorp.com/api/Attendants/{id}");
+
+
+        #region Private methods
         private static string Action(string name) => $"{rootUrl}/{name}";
 
         private static string FormatDouble(double d) => d.ToString().Replace(',', '.');
@@ -20,7 +33,7 @@ namespace Chamou.WindowsApp.Models
         {
             //Create an HTTP client object
             HttpClient httpClient = new HttpClient();
-            
+
             Uri requestUri = new Uri(url);
 
             //Send the GET request asynchronously and retrieve the response as a string.
@@ -31,7 +44,7 @@ namespace Chamou.WindowsApp.Models
             {
                 //Send the GET request
                 httpResponse = await httpClient.GetAsync(requestUri);
-                httpResponse.EnsureSuccessStatusCode();
+                //httpResponse.EnsureSuccessStatusCode();
                 httpResponseBody = await httpResponse.Content.ReadAsStringAsync();
             }
             catch (Exception ex)
@@ -40,16 +53,8 @@ namespace Chamou.WindowsApp.Models
             }
 
             return httpResponseBody;
-        }
+        } 
+        #endregion
 
-        public static async Task<IEnumerable<Place>> GetPlaces() =>
-            JsonConvert.DeserializeObject<IEnumerable<Place>>(await GetStringData(Action("")));
-
-        public static async Task<Place> GetPlaceByCoordinates(double latitude, double longitude) =>
-        JsonConvert.DeserializeObject<Place>(
-            await GetStringData(Action($"ByCoordinates?Latitude={FormatDouble(latitude)}&Longitude={FormatDouble(longitude)}")));
-            
-
-        
     }
 }

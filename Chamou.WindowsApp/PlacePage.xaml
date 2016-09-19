@@ -46,7 +46,7 @@
                         </Grid.ColumnDefinitions>
 
                         <TextBlock Grid.Column="0" Margin="12" Text="{Binding Name}"></TextBlock>
-                        <Button Grid.Column="1" Margin="12">
+                        <Button Grid.Column="1" Margin="12" Click="AttendantButton_Click">
                             <SymbolIcon Symbol="People"></SymbolIcon>
                         </Button>
                     </Grid>

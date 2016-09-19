@@ -1,10 +1,12 @@
-﻿using System;
+﻿using Chamou.WindowsApp.Models;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -31,6 +33,13 @@ namespace Chamou.WindowsApp
         {
             DataContext = e.Parameter;
             base.OnNavigatedTo(e);
+        }
+
+        private async void AttendantButton_Click(object sender, RoutedEventArgs e)
+        {
+            var btn = sender as Button;
+            var at = btn.DataContext as Attendant;
+            await new MessageDialog(await WebService.CallAttendant(at.Id)).ShowAsync();
         }
     }
 
