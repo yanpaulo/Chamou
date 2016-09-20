@@ -17,7 +17,7 @@ namespace Chamou.Web.ApiControllers
         public IHttpActionResult GetAttendant(int id)
         {
             var buffer = new byte[256];
-            var data = $"{id};{new Random().Next(20).ToString()}";
+            var data = $"{id};{new Random().Next(1, 11).ToString()}";
             var client = new TcpClient("ypushtcp.cloudapp.net", 8081);
             var stream = client.GetStream();
 
