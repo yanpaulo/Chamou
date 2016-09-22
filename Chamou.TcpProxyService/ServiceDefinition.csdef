@@ -5,7 +5,7 @@
       <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" />
     </ConfigurationSettings>
     <Endpoints>
-      <InputEndpoint name="Devices" protocol="tcp" port="8080" />
+      <InputEndpoint name="Devices" protocol="tcp" port="80" />
       <InputEndpoint name="Servers" protocol="tcp" port="8081" />
     </Endpoints>
   </WorkerRole>

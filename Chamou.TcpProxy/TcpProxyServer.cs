@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
@@ -12,10 +13,25 @@ namespace Chamou.TcpProxy
     public class TcpProxyServer
     {
         private ClientManager _tcpManager = ClientManager.Instance;
-        private static readonly int 
+        private int 
             _devicePort = 8080, _servicePort = 8081;
         private IPAddress _localAddr = IPAddress.Any;
 
+        public TcpProxyServer()
+        {
+            string strDevicePort = ConfigurationManager.AppSettings["DevicePort"],
+                strServicePort = ConfigurationManager.AppSettings["ServicePort"];
+            int tmp;
+            if (int.TryParse(strDevicePort, out tmp))
+            {
+                _devicePort = tmp;
+            }
+            if (int.TryParse(strServicePort, out tmp))
+            {
+                _servicePort = tmp;
+            }
+        }
+        
         public void Run()
         {
             var deviceTask = AcceptClientDevicesAsync();
