@@ -10,14 +10,16 @@ using System.Web.Http;
 
 namespace Chamou.Web.ApiControllers
 {
+    [RoutePrefix("api/Attendants")]
     public class AttendantsController : ApiController
     {
         private ChamouContext db = new ChamouContext();
 
-        public IHttpActionResult GetAttendant(int id)
+        [Route("{id}")]
+        public IHttpActionResult GetAttendant(int id, [FromUri]string message)
         {
             var buffer = new byte[256];
-            var data = $"{id};{new Random().Next(1, 11).ToString()}";
+            var data = $"{id};{new Random().Next(1, 11)}:{message}";
             var client = new TcpClient("ypushtcp.cloudapp.net", 8081);
             var stream = client.GetStream();
 
