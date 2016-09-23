@@ -16,7 +16,7 @@ namespace Chamou.Web.ApiControllers
         private ChamouContext db = new ChamouContext();
 
         [Route("{id}")]
-        public IHttpActionResult GetAttendant(int id, [FromUri]string message)
+        public IHttpActionResult GetAttendant(int id, string message = null)
         {
             var buffer = new byte[256];
             var data = $"{id};{new Random().Next(1, 11)}:{message}";
