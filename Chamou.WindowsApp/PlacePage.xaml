@@ -17,29 +17,39 @@
     </Page.Transitions>
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Grid.RowDefinitions>
-            <RowDefinition Height="80"></RowDefinition>
+            <RowDefinition Height="84"></RowDefinition>
             <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
         </Grid.RowDefinitions>
-        <TextBlock Grid.Row="0" Margin="12"
-                   Style="{ThemeResource HeaderTextBlockStyle}" Foreground="{ThemeResource SystemControlForegroundAccentBrush}"
-                   Text="{Binding Name}"></TextBlock>
+
+        <StackPanel Grid.Row="0" Background="{ThemeResource SystemControlBackgroundChromeMediumBrush}" VerticalAlignment="Stretch">
+            <TextBlock Margin="12,24,12,0"
+                   Style="{ThemeResource HeaderTextBlockStyle}"
+                   Text="Chamou"></TextBlock>
+        </StackPanel>
+
         <StackPanel Grid.Row="1" HorizontalAlignment="Stretch" Orientation="Vertical" Margin="12">
             <StackPanel Orientation="Horizontal">
                 <TextBlock Style="{ThemeResource TitleTextBlockStyle}" Margin="0,0,8,0">Você está em:</TextBlock>
                 <TextBlock Style="{ThemeResource TitleTextBlockStyle}" Foreground="{ThemeResource SystemControlForegroundAccentBrush}" Text="{Binding Name}"></TextBlock>
             </StackPanel>
-            <TextBlock Margin="0,12" Style="{ThemeResource SubtitleTextBlockStyle}">Funcionários:</TextBlock>
+
         </StackPanel>
         <ListView Grid.Row="2" SelectionMode="None" IsItemClickEnabled="True" ItemsSource="{Binding Attendants}">
+            <ListView.HeaderTemplate>
+                <DataTemplate>
+                    <TextBlock Margin="12,8" Style="{ThemeResource SubtitleTextBlockStyle}">Funcionários:</TextBlock>
+                </DataTemplate>
+            </ListView.HeaderTemplate>
             <ListView.ItemContainerStyle>
                 <Style TargetType="ListViewItem">
                     <Setter Property="HorizontalContentAlignment" Value="Stretch"></Setter>
                     <Setter Property="Padding" Value="0"></Setter>
                 </Style>
             </ListView.ItemContainerStyle>
-            
+
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <Grid BorderBrush="Gray" BorderThickness="0 0 0 1" HorizontalAlignment="Stretch">
@@ -55,7 +65,12 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
-        <Grid Grid.Row="3" Margin="12">
+        <StackPanel Grid.Row="3" HorizontalAlignment="Stretch">
+            <StackPanel.Background>
+                <ImageBrush Stretch="UniformToFill" ImageSource="Assets/waiter.jpg"/>
+            </StackPanel.Background>
+        </StackPanel>
+        <Grid Grid.Row="4" VerticalAlignment="Bottom" Margin="12">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
