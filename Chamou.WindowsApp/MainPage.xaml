@@ -9,6 +9,10 @@
     Loaded="Page_Loaded">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <ProgressRing Width="64" Height="64" IsActive="True"></ProgressRing>
+        <StackPanel VerticalAlignment="Center" Orientation="Vertical">
+            <TextBlock HorizontalAlignment="Center">Consultando sua Localização...</TextBlock>
+            <ProgressRing Width="64" Height="64" IsActive="True"></ProgressRing>
+        </StackPanel>
+        
     </Grid>
 </Page>

@@ -39,13 +39,12 @@ namespace Chamou.WindowsApp
                 // If DesiredAccuracy or DesiredAccuracyInMeters are not set (or value is 0), DesiredAccuracy.Default is used.
                 Geolocator geolocator = new Geolocator { DesiredAccuracyInMeters = 1 };
 
-                // Carry out the operation.
+                // Carry out the operation
                 Geoposition pos = await geolocator.GetGeopositionAsync();
                 var point = pos.Coordinate.Point.Position;
                 var place = await WebService.GetPlaceByCoordinates(point.Latitude, point.Longitude);
                 if (place != null)
                 {
-                    
                     Frame.Navigate(typeof(PlacePage), place, new DrillInNavigationTransitionInfo()); 
                 }
                 else
