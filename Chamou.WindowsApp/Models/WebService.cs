@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.Web.Http;
@@ -20,8 +21,10 @@ namespace Chamou.WindowsApp.Models
         JsonConvert.DeserializeObject<Place>(
             await GetStringData(Action($"ByCoordinates?Latitude={FormatDouble(latitude)}&Longitude={FormatDouble(longitude)}")));
 
-        public static async Task<string> CallAttendant(int id) =>
-            await GetStringData($"http://chamou.yanscorp.com/api/Attendants/{id}");
+        public static async Task<string> CallAttendant(int id, string message) =>
+            JsonConvert.DeserializeObject<Dictionary<string, string>>
+            (await GetStringData($"http://chamou.yanscorp.com/api/Attendants/{id}?message={WebUtility.UrlEncode(message)}"))
+            ["Message"];
 
 
         #region Private methods
@@ -53,7 +56,7 @@ namespace Chamou.WindowsApp.Models
             }
 
             return httpResponseBody;
-        } 
+        }
         #endregion
 
     }

@@ -24,6 +24,8 @@ namespace Chamou.WindowsApp
     /// </summary>
     public sealed partial class PlacePage : Page
     {
+        private string message = "Chamando";
+
         public PlacePage()
         {
             this.InitializeComponent();
@@ -39,7 +41,7 @@ namespace Chamou.WindowsApp
         {
             var btn = sender as Button;
             var at = btn.DataContext as Attendant;
-            await new MessageDialog(await WebService.CallAttendant(at.Id)).ShowAsync();
+            await new MessageDialog(await WebService.CallAttendant(at.Id, message)).ShowAsync();
         }
 
         private void RefreshIcon_Click(object sender, RoutedEventArgs e)
