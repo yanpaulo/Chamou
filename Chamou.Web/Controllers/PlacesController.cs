@@ -38,7 +38,7 @@ namespace Chamou.Web.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.__Data = JsonConvert.SerializeObject(place);
+            ViewBag.__Data = JsonConvert.SerializeObject(Mapper.Map<PlaceDTO>(place));
             return View(place);
         }
 
@@ -59,22 +59,7 @@ namespace Chamou.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                //First, get the area defined by the well-known text using left-hand rule
-                var sqlGeography =
-                SqlGeography.STGeomFromText(new SqlChars(locationWellKnownText), DbGeography.DefaultCoordinateSystemId)
-                .MakeValid();
-
-                //Now get the inversion of the above area
-                var invertedSqlGeography = sqlGeography.ReorientObject();
-                
-                //Whichever of these is smaller is the enclosed polygon, so we use that one.
-                if (sqlGeography.STArea() > invertedSqlGeography.STArea())
-                {
-                    sqlGeography = invertedSqlGeography;
-                }
-
-                //AddedLine
-                place.Location = DbSpatialServices.Default.GeographyFromProviderValue(sqlGeography);
+                place.Location = FixedGeomFromText(locationWellKnownText);
 
                 db.Places.Add(place);
 
@@ -117,13 +102,14 @@ namespace Chamou.Web.Controllers
                 if (!string.IsNullOrWhiteSpace(locationWellKnownText))
                 {
                     db.GeoPoints.RemoveRange(place.LocationPoints);
-                    place.Location = DbGeography.FromText(locationWellKnownText);
                     place.CenterLatitude = model.CenterLatitude;
                     place.CenterLongitude = model.CenterLongitude;
                     model.LocationPoints.ToList().ForEach(p => place.LocationPoints.Add(p));
+                    place.Location = FixedGeomFromText(locationWellKnownText);
                 }
                 //db.Entry(model).State = EntityState.Modified;
                 db.SaveChanges();
+
                 return new HttpStatusCodeResult(HttpStatusCode.OK);
             }
             Response.TrySkipIisCustomErrors = true;
@@ -158,6 +144,26 @@ namespace Chamou.Web.Controllers
             db.Places.Remove(place);
             db.SaveChanges();
             return RedirectToAction("Index");
+        }
+
+        private DbGeography FixedGeomFromText(string locationWellKnownText)
+        {
+            //First, get the area defined by the well-known text using left-hand rule
+            var sqlGeography =
+            SqlGeography.STGeomFromText(new SqlChars(locationWellKnownText), DbGeography.DefaultCoordinateSystemId)
+            .MakeValid();
+
+            //Now get the inversion of the above area
+            var invertedSqlGeography = sqlGeography.ReorientObject();
+
+            //Whichever of these is smaller is the enclosed polygon, so we use that one.
+            if (sqlGeography.STArea() > invertedSqlGeography.STArea())
+            {
+                sqlGeography = invertedSqlGeography;
+            }
+
+            //AddedLine
+            return DbSpatialServices.Default.GeographyFromProviderValue(sqlGeography);
         }
 
         protected override void Dispose(bool disposing)
