@@ -30,7 +30,7 @@ namespace Chamou.Web.ApiControllers
 
             if (!responseMessage.ToLower().Contains("erro"))
             {
-                return Ok(responseMessage);
+                return Ok(new { Message = responseMessage });
             }
 
             return BadRequest(responseMessage);
