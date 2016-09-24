@@ -35,9 +35,9 @@ namespace Chamou.WindowsApp
             var accessStatus = await Geolocator.RequestAccessAsync();
             if (accessStatus == GeolocationAccessStatus.Allowed)
             {
-
                 // If DesiredAccuracy or DesiredAccuracyInMeters are not set (or value is 0), DesiredAccuracy.Default is used.
-                Geolocator geolocator = new Geolocator { DesiredAccuracyInMeters = 1 };
+                //Geolocator geolocator = new Geolocator { DesiredAccuracyInMeters = 1 };
+                Geolocator geolocator = new Geolocator ();
 
                 // Carry out the operation
                 Geoposition pos = await geolocator.GetGeopositionAsync();
