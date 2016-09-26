@@ -10,7 +10,13 @@
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <StackPanel VerticalAlignment="Center" Orientation="Vertical">
-            <TextBlock HorizontalAlignment="Center">Consultando sua Localização...</TextBlock>
+            <TextBlock Text="{x:Bind Message}" HorizontalAlignment="Center">
+                <TextBlock.Transitions>
+                    <TransitionCollection>
+                        <ContentThemeTransition></ContentThemeTransition>
+                    </TransitionCollection>
+                </TextBlock.Transitions>
+            </TextBlock>
             <ProgressRing Width="64" Height="64" IsActive="True"></ProgressRing>
         </StackPanel>
         
