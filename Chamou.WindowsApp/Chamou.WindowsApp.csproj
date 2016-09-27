@@ -99,6 +99,7 @@
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Models\Attendant.cs" />
+    <Compile Include="Models\CachedObject.cs" />
     <Compile Include="Models\GeoPoint.cs" />
     <Compile Include="Models\Place.cs" />
     <Compile Include="Models\WebService.cs" />

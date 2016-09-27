@@ -46,12 +46,7 @@ namespace Chamou.WindowsApp
 
         private void RefreshIcon_Click(object sender, RoutedEventArgs e)
         {
-            var localSettings =
-                Windows.Storage.ApplicationData.Current.LocalSettings.Values;
-
-            localSettings.Remove(LocalSettingKeys.LastLatitude);
-            localSettings.Remove(LocalSettingKeys.LastLongitude);
-            localSettings.Remove(LocalSettingKeys.LastPlace);
+            CachedObject.Instance.Clean();
             Frame.GoBack();
         }
     }

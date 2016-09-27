@@ -23,12 +23,6 @@ using Windows.UI.Xaml.Navigation;
 
 namespace Chamou.WindowsApp
 {
-    struct LocalSettingKeys
-    {
-        public static readonly string LastLatitude = "LastLatitude",
-            LastLongitude = "LastLongidute", LastPlace = "LastPlace";
-    }
-
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
@@ -46,16 +40,17 @@ namespace Chamou.WindowsApp
 
         private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
+            var cache = CachedObject.Instance;
+
             UpdateMessage("Consultando sua Localização...");
-            var point = GetStoredGeoposition() ?? await RequestGeopositionAsync();
+            var point = (cache.Geoposition = cache.Geoposition ?? await RequestGeopositionAsync()).Value;
 
             UpdateMessage("Consultando o Serviço...");
-            var place = GetStoredPlace() ?? await WebService.GetPlaceByCoordinates(point.Latitude, point.Longitude);
+            var place = cache.Place = cache.Place ?? await WebService.GetPlaceByCoordinates(point.Latitude, point.Longitude);
 
             if (place != null)
             {
-                StoreGeoposition(point);
-                StorePlace(place);
+                cache.UpdateStorage();
                 Frame.Navigate(typeof(PlacePage), place, new DrillInNavigationTransitionInfo());
             }
             else
@@ -81,34 +76,6 @@ namespace Chamou.WindowsApp
             }
 
             throw new InvalidOperationException("Access to Geoposition not allowed");
-        }
-        
-        private BasicGeoposition? GetStoredGeoposition()
-        {
-            object latitude, longitude;
-            if(localSettings.Values.TryGetValue(LocalSettingKeys.LastLatitude, out latitude) && localSettings.Values.TryGetValue(LocalSettingKeys.LastLongitude, out longitude))
-            {
-                return new BasicGeoposition { Latitude = (double)latitude, Longitude = (double)longitude };
-            }
-            return null;
-        }
-
-        private void StoreGeoposition(BasicGeoposition p)
-        {
-            localSettings.Values[LocalSettingKeys.LastLatitude] = p.Latitude;
-            localSettings.Values[LocalSettingKeys.LastLongitude] =  p.Longitude;
-        }
-
-        private Place GetStoredPlace()
-        {
-            return localSettings.Values.ContainsKey(LocalSettingKeys.LastPlace) ?
-                JsonConvert.DeserializeObject<Place>(localSettings.Values[LocalSettingKeys.LastPlace] as string) :
-                null;
-        }
-
-        private void StorePlace(Place p)
-        {
-            localSettings.Values[LocalSettingKeys.LastPlace] = JsonConvert.SerializeObject(p);
         }
 
         private void UpdateMessage(string message)
