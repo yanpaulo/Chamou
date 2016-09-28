@@ -26,7 +26,7 @@ namespace Chamou.WindowsApp
     /// </summary>
     public sealed partial class PlacePage : Page
     {
-        private string message = "Chamando";
+        private string Message { get; set; } = "Chamando";
         
         public PlacePage()
         {
@@ -44,19 +44,42 @@ namespace Chamou.WindowsApp
             await RefreshPlaceAsync();
         }
 
+
+        #region Events
+        private async void AttendantButton_Click(object sender, RoutedEventArgs e)
+        {
+            var btn = sender as Button;
+            var at = btn.DataContext as Attendant;
+            try
+            {
+                await new MessageDialog(await WebService.CallAttendant(at.Id, Message)).ShowAsync();
+            }
+            catch (System.Runtime.InteropServices.COMException)
+            {
+                await InterwebzErrorAsync();
+            }
+        }
+
+        private async void RefreshIcon_Click(object sender, RoutedEventArgs e)
+        {
+            await RefreshPlaceAsync();
+        } 
+        #endregion
+        
+        #region Private Methods
         private async Task RefreshPlaceAsync()
         {
             var cache = CachedObject.Instance;
 
             UpdateStatus("Consultando sua Localização...");
             var point = (cache.Geoposition = await RequestGeopositionAsync()).Value;
-            await System.Threading.Tasks.Task.Delay(200);
+            await Task.Delay(200);
 
             try
             {
                 UpdateStatus("Consultando o Serviço...");
                 var place = cache.Place = await WebService.GetPlaceByCoordinates(point.Latitude, point.Longitude);
-                await System.Threading.Tasks.Task.Delay(100);
+                await Task.Delay(100);
                 if (place != null)
                 {
                     UpdateStatus("", false);
@@ -75,26 +98,6 @@ namespace Chamou.WindowsApp
             }
         }
 
-
-        private async void AttendantButton_Click(object sender, RoutedEventArgs e)
-        {
-            var btn = sender as Button;
-            var at = btn.DataContext as Attendant;
-            try
-            {
-                await new MessageDialog(await WebService.CallAttendant(at.Id, message)).ShowAsync();
-            }
-            catch (System.Runtime.InteropServices.COMException)
-            {
-                await InterwebzErrorAsync();
-            }
-        }
-
-        private async void RefreshIcon_Click(object sender, RoutedEventArgs e)
-        {
-            await RefreshPlaceAsync();
-        }
-        
         private void UpdateStatus(string message, bool loading = true)
         {
             MainPage.Current.SetProgressMessage(message);
@@ -108,7 +111,8 @@ namespace Chamou.WindowsApp
             UpdateStatus("Erro");
             await new MessageDialog("Sem conectividade com a Internet.").ShowAsync();
             UpdateStatus("", false);
-        }
+        } 
+        #endregion
     }
 
 }

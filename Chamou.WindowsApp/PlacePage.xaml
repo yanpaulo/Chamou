@@ -22,6 +22,7 @@
             <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
         </Grid.RowDefinitions>
 
         <StackPanel Grid.Row="0" HorizontalAlignment="Stretch" Orientation="Vertical" Margin="12">
@@ -74,12 +75,15 @@
                 <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
             <TextBlock Grid.Column="0" Margin="0,4">Mensagem:</TextBlock>
-            <TextBox Text="{x:Bind Path=message,Mode=TwoWay}" Grid.Column="1" Margin="12,0" HorizontalAlignment="Stretch" VerticalAlignment="Top"></TextBox>
+            <TextBox Text="{x:Bind Path=Message,Mode=TwoWay}" Grid.Column="1" Margin="12,0" HorizontalAlignment="Stretch" VerticalAlignment="Top"></TextBox>
         </Grid>
+        <CommandBar Grid.Row="4">
+            <AppBarButton x:Name="RefreshIcon" Icon="Refresh" Label="Atualizar" Click="RefreshIcon_Click"></AppBarButton>
+        </CommandBar>
     </Grid>
-    <Page.BottomAppBar>
+    <!--<Page.BottomAppBar>
         <CommandBar>
             <AppBarButton x:Name="RefreshIcon" Icon="Refresh" Label="Atualizar" Click="RefreshIcon_Click"></AppBarButton>
         </CommandBar>
-    </Page.BottomAppBar>
+    </Page.BottomAppBar>-->
 </Page>
