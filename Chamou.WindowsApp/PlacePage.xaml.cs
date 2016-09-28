@@ -52,27 +52,42 @@ namespace Chamou.WindowsApp
             var point = (cache.Geoposition = await RequestGeopositionAsync()).Value;
             await System.Threading.Tasks.Task.Delay(200);
 
-            UpdateStatus("Consultando o Serviço...");
-            var place = cache.Place = await WebService.GetPlaceByCoordinates(point.Latitude, point.Longitude);
-            await System.Threading.Tasks.Task.Delay(100);
-            if (place != null)
+            try
             {
-                UpdateStatus("", false);
-                cache.UpdateStorage();
-                DataContext = place;
+                UpdateStatus("Consultando o Serviço...");
+                var place = cache.Place = await WebService.GetPlaceByCoordinates(point.Latitude, point.Longitude);
+                await System.Threading.Tasks.Task.Delay(100);
+                if (place != null)
+                {
+                    UpdateStatus("", false);
+                    cache.UpdateStorage();
+                    DataContext = place;
+                }
+                else
+                {
+                    await new Windows.UI.Popups.MessageDialog("Local sem cobertura.").ShowAsync();
+                    Application.Current.Exit();
+                }
             }
-            else
+            catch (System.Runtime.InteropServices.COMException)
             {
-                await new Windows.UI.Popups.MessageDialog("Local sem cobertura.").ShowAsync();
-                Application.Current.Exit();
+                await InterwebzErrorAsync();
             }
         }
+
 
         private async void AttendantButton_Click(object sender, RoutedEventArgs e)
         {
             var btn = sender as Button;
             var at = btn.DataContext as Attendant;
-            await new MessageDialog(await WebService.CallAttendant(at.Id, message)).ShowAsync();
+            try
+            {
+                await new MessageDialog(await WebService.CallAttendant(at.Id, message)).ShowAsync();
+            }
+            catch (System.Runtime.InteropServices.COMException)
+            {
+                await InterwebzErrorAsync();
+            }
         }
 
         private async void RefreshIcon_Click(object sender, RoutedEventArgs e)
@@ -85,6 +100,14 @@ namespace Chamou.WindowsApp
             MainPage.Current.SetProgressMessage(message);
             progressBar.Visibility = loading ? Visibility.Visible : Visibility.Collapsed;
             UpdateLayout();
+        }
+
+
+        private async Task InterwebzErrorAsync()
+        {
+            UpdateStatus("Erro");
+            await new MessageDialog("Sem conectividade com a Internet.").ShowAsync();
+            UpdateStatus("", false);
         }
     }
 

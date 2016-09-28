@@ -50,9 +50,10 @@ namespace Chamou.WindowsApp.Models
                 //httpResponse.EnsureSuccessStatusCode();
                 httpResponseBody = await httpResponse.Content.ReadAsStringAsync();
             }
-            catch (Exception ex)
+            catch (System.Runtime.InteropServices.COMException ex)
             {
                 httpResponseBody = "Error: " + ex.HResult.ToString("X") + " Message: " + ex.Message;
+                throw;
             }
 
             return httpResponseBody;
