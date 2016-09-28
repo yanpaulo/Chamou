@@ -1,4 +1,5 @@
-﻿using Chamou.WindowsApp.Models;
+﻿using Chamou.AppCommon.Models;
+using Chamou.WindowsApp.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;

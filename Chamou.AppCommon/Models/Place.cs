@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Chamou.WindowsApp.Models
+namespace Chamou.AppCommon.Models
 {
     public class Place
     {

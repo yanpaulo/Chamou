@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Chamou.WindowsApp.Models
+namespace Chamou.AppCommon.Models
 {
     public class Attendant
     {

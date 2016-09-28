@@ -101,11 +101,7 @@
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Models\Attendant.cs" />
     <Compile Include="Models\CachedObject.cs" />
-    <Compile Include="Models\GeoPoint.cs" />
-    <Compile Include="Models\Place.cs" />
-    <Compile Include="Models\WebService.cs" />
     <Compile Include="PlacePage.xaml.cs">
       <DependentUpon>PlacePage.xaml</DependentUpon>
     </Compile>
@@ -146,6 +142,12 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Chamou.AppCommon\Chamou.AppCommon.csproj">
+      <Project>{b34d43ec-b104-411e-915a-ff366f13801f}</Project>
+      <Name>Chamou.AppCommon</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
