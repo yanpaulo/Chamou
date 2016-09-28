@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Popups;
@@ -40,6 +41,11 @@ namespace Chamou.WindowsApp
 
         private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
+            await RefreshPlaceAsync();
+        }
+
+        private async Task RefreshPlaceAsync()
+        {
             var cache = CachedObject.Instance;
 
             UpdateStatus("Consultando sua Localização...");
@@ -69,14 +75,10 @@ namespace Chamou.WindowsApp
             await new MessageDialog(await WebService.CallAttendant(at.Id, message)).ShowAsync();
         }
 
-        private void RefreshIcon_Click(object sender, RoutedEventArgs e)
+        private async void RefreshIcon_Click(object sender, RoutedEventArgs e)
         {
-            CachedObject.Instance.Clean();
-            Frame.Navigate(typeof(LoadPlacePage));
-            Frame.BackStack.Clear();
+            await RefreshPlaceAsync();
         }
-
-        
         
         private void UpdateStatus(string message, bool loading = true)
         {
