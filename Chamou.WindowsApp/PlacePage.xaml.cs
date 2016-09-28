@@ -47,7 +47,9 @@ namespace Chamou.WindowsApp
         private void RefreshIcon_Click(object sender, RoutedEventArgs e)
         {
             CachedObject.Instance.Clean();
-            Frame.GoBack();
+            Frame.Navigate(typeof(LoadPlacePage));
+            Frame.BackStack.Clear();
+
         }
     }
 

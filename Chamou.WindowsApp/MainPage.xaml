@@ -9,16 +9,19 @@
     Loaded="Page_Loaded">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <StackPanel VerticalAlignment="Center" Orientation="Vertical">
-            <TextBlock Text="{x:Bind Message}" HorizontalAlignment="Center">
-                <TextBlock.Transitions>
-                    <TransitionCollection>
-                        <ContentThemeTransition></ContentThemeTransition>
-                    </TransitionCollection>
-                </TextBlock.Transitions>
-            </TextBlock>
-            <ProgressRing Width="64" Height="64" IsActive="True"></ProgressRing>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="84"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Background="{ThemeResource SystemControlBackgroundChromeMediumBrush}" VerticalAlignment="Stretch">
+            <TextBlock Margin="12,24,12,0"
+                   Style="{ThemeResource HeaderTextBlockStyle}"
+                   Text="Chamou"></TextBlock>
         </StackPanel>
+        <Frame x:Name="childFrame" Grid.Row="1">
+        </Frame>
+        
         
     </Grid>
 </Page>
