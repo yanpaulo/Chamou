@@ -23,8 +23,9 @@ namespace Chamou.WindowsApp
     /// </summary>
     public sealed partial class MainPage : Page
     {
+        public static MainPage Current;
 
-        public string Message { get; set; }
+        public string ProgressMessage { get; set; }
 
         public MainPage()
         {
@@ -33,7 +34,14 @@ namespace Chamou.WindowsApp
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
+            Current = this;
             childFrame.Navigate(typeof(LoadPlacePage));
+        }
+
+        public void SetProgressMessage(string message)
+        {
+            ProgressMessage = message;
+            Bindings.Update();
         }
         
     }

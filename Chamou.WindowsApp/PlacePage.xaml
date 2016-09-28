@@ -5,7 +5,8 @@
     xmlns:local="using:Chamou.WindowsApp"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d">
+    mc:Ignorable="d"
+    Loaded="Page_Loaded">
     <Page.Transitions>
         <TransitionCollection>
             <NavigationThemeTransition>
@@ -24,6 +25,10 @@
         </Grid.RowDefinitions>
 
         <StackPanel Grid.Row="0" HorizontalAlignment="Stretch" Orientation="Vertical" Margin="12">
+            <StackPanel Margin="0,-12,0,0">
+                <ProgressBar x:Name="progressBar" IsIndeterminate="True" Visibility="Collapsed"></ProgressBar>    
+            </StackPanel>
+            
             <StackPanel Orientation="Horizontal">
                 <TextBlock Style="{ThemeResource TitleTextBlockStyle}" Margin="0,0,8,0">Você está em:</TextBlock>
                 <TextBlock Style="{ThemeResource TitleTextBlockStyle}" Foreground="{ThemeResource SystemControlForegroundAccentBrush}" Text="{Binding Name}"></TextBlock>
