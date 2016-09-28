@@ -16,6 +16,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
+using static Chamou.WindowsApp.Util;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -55,25 +56,7 @@ namespace Chamou.WindowsApp
                 Application.Current.Exit();
             }
         }
-
-
-        private async Task<BasicGeoposition> RequestGeopositionAsync()
-        {
-            var accessStatus = await Geolocator.RequestAccessAsync();
-            if (accessStatus == GeolocationAccessStatus.Allowed)
-            {
-                // If DesiredAccuracy or DesiredAccuracyInMeters are not set (or value is 0), DesiredAccuracy.Default is used.
-                //Geolocator geolocator = new Geolocator { DesiredAccuracyInMeters = 1 };
-                Geolocator geolocator = new Geolocator();
-
-                // Carry out the operation
-                Geoposition pos = await geolocator.GetGeopositionAsync();
-                return pos.Coordinate.Point.Position;
-            }
-
-            throw new InvalidOperationException("Access to Geoposition not allowed");
-        }
-
+        
         private void UpdateMessage(string message)
         {
             Message = message;
