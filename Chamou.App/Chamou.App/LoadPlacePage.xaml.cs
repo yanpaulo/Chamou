@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Chamou.AppCommon.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,8 +19,8 @@ namespace Chamou.App
         protected override async void OnAppearing()
         {
             base.OnAppearing();
-            await Task.Delay(500);
-            await Navigation.PushAsync(new PlacePage());
+            var place = await WebService.GetPlaceByCoordinates(-3.744087, -38.535896);
+            await Navigation.PushAsync(new PlacePage() { BindingContext = place });
         }
     }
 }
