@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Chamou.App.PlacePage"
+             Title="Chamou">
+  
+  <Grid>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto"></RowDefinition>
+      <RowDefinition Height="Auto"></RowDefinition>
+      <RowDefinition Height="*"></RowDefinition>
+      <RowDefinition Height="Auto"></RowDefinition>
+    </Grid.RowDefinitions>
+
+    <StackLayout Grid.Row="0" HorizontalOptions="Fill" Orientation="Vertical">
+      <StackLayout>
+        <ProgressBar x:Name="progressBar" IsVisible="False"></ProgressBar>
+      </StackLayout>
+
+      <StackLayout Orientation="Horizontal">
+        <Label >Você está em:</Label>
+        <Label Text="{Binding Name}" BackgroundColor="Accent"></Label>
+      </StackLayout>
+
+    </StackLayout>
+
+    <StackLayout Grid.Row="1" Orientation="Vertical">
+      <ListView  Header="Funcionários" ItemsSource="{Binding Attendants}" HeightRequest="20">
+        <ListView.ItemTemplate>
+          <DataTemplate>
+            <TextCell Text="{Binding Name}"
+                       Detail="Chamar" />
+          </DataTemplate>
+        </ListView.ItemTemplate>
+      </ListView>
+    </StackLayout >
+      
+    
+    <ContentView Grid.Row="2" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+      <Image x:Name="img1" Aspect="AspectFill" Source="waiter.jpg" />
+    </ContentView>
+
+
+    <Grid Grid.Row="3" VerticalOptions="End">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="Auto"></ColumnDefinition>
+        <ColumnDefinition Width="*"></ColumnDefinition>
+      </Grid.ColumnDefinitions>
+      <Label Grid.Column="0">Mensagem:</Label>
+      <Entry Grid.Column="1" HorizontalOptions="Fill" VerticalOptions="Start"></Entry>
+    </Grid>
+    
+  </Grid>
+</ContentPage>

@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Chamou.App.LoadPlacePage"
+             Title="Chamou">
+  <StackLayout VerticalOptions="Center" Orientation="Vertical">
+    <Label Text="Carregando..." HorizontalOptions="Center">
+    </Label>
+    <ActivityIndicator  WidthRequest="64" HeightRequest="64" IsRunning="True"></ActivityIndicator>
+  </StackLayout>
+</ContentPage>

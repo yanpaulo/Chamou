@@ -3,21 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using Xamarin.Forms;
 
 namespace Chamou.App
 {
-    public partial class MainPage : ContentPage
+    public partial class PlacePage : ContentPage
     {
-        public MainPage()
+        public PlacePage()
         {
             InitializeComponent();
-            
-        }
-
-        protected override void OnAppearing()
-        {
-            base.OnAppearing();
+            ToolbarItems.Add(new ToolbarItem("Atualizar", "waiter.jpg", () => { }));
+            //img1.Source = ImageSource.FromFile("StoreLogo.png");
         }
     }
 }
