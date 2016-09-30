@@ -45,7 +45,7 @@
         <ColumnDefinition Width="*"></ColumnDefinition>
       </Grid.ColumnDefinitions>
       <Label Grid.Column="0">Mensagem:</Label>
-      <Entry Grid.Column="1" HorizontalOptions="Fill" VerticalOptions="Start"></Entry>
+      <Entry x:Name="messageEntry" Grid.Column="1" HorizontalOptions="Fill" VerticalOptions="Start"></Entry>
     </Grid>
     
   </Grid>

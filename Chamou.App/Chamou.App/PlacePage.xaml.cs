@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
 using Xamarin.Forms;
 
 namespace Chamou.App
@@ -21,7 +20,15 @@ namespace Chamou.App
         {
             base.OnAppearing();
             var model = BindingContext as Place;
+            
             listView.HeightRequest = listView.RowHeight * (model.Attendants.Count() + 1);
+            listView.ItemTapped += async (o, e) =>
+            {
+                    
+                var attendant = listView.SelectedItem as Attendant;
+                var message = await WebService.CallAttendant(attendant.Id, messageEntry.Text);
+                await DisplayAlert("Resposta", message, "Ok");
+            };
         }
     }
 }

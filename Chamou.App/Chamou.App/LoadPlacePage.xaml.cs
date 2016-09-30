@@ -41,6 +41,7 @@ namespace Chamou.App
             {
                 await DisplayAlert("Erro", ex.Message, "Ok");
                 //Debug.WriteLine("Unable to get location, may need to increase timeout: " + ex);
+                throw;
             }
 
         }
