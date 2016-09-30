@@ -1,4 +1,5 @@
 ﻿using Chamou.AppCommon.Models;
+using Plugin.Geolocator;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,8 +20,23 @@ namespace Chamou.App
         protected override async void OnAppearing()
         {
             base.OnAppearing();
-            var place = await WebService.GetPlaceByCoordinates(-3.744087, -38.535896);
-            await Navigation.PushAsync(new PlacePage() { BindingContext = place });
+            
+            try
+            {
+                var locator = CrossGeolocator.Current;
+                locator.DesiredAccuracy = 50;
+
+                var position = await locator.GetPositionAsync();
+                var place = await WebService.GetPlaceByCoordinates(position.Latitude, position.Longitude);
+                await Navigation.PushAsync(new PlacePage() { BindingContext = place });
+                ;
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Erro", ex.Message, "Cancelar");
+                //Debug.WriteLine("Unable to get location, may need to increase timeout: " + ex);
+            }
+            
         }
     }
 }
