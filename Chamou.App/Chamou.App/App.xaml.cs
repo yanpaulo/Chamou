@@ -12,10 +12,11 @@ namespace Chamou.App
         public App()
         {
             InitializeComponent();
-            MainPage = new NavigationPage(new Chamou.App.LoadPlacePage())
+            MainPage = new NavigationPage(new PlacePage())
             {
                 BarBackgroundColor = Color.Gray
             };
+            
         }
 
         protected override void OnStart()

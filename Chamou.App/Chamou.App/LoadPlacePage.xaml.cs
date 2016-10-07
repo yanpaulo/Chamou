@@ -12,6 +12,9 @@ namespace Chamou.App
 {
     public partial class LoadPlacePage : ContentPage
     {
+        public Place Place { get; private set; }
+        public event EventHandler PlaceLoaded;
+        
         public LoadPlacePage()
         {
             InitializeComponent();
@@ -24,13 +27,14 @@ namespace Chamou.App
             try
             {
                 var locator = CrossGeolocator.Current;
-                locator.DesiredAccuracy = 50;
+                //locator.DesiredAccuracy = 5;
 
                 var position = await locator.GetPositionAsync();
-                var place = await WebService.GetPlaceByCoordinates(position.Latitude, position.Longitude);
-                if (place != null)
+                Place = await WebService.GetPlaceByCoordinates(position.Latitude, position.Longitude);
+
+                if (Place != null)
                 {
-                    await Navigation.PushAsync(new PlacePage() { BindingContext = place }); 
+                    PlaceLoaded?.Invoke(this, new EventArgs());
                 }
                 else
                 {
@@ -40,7 +44,6 @@ namespace Chamou.App
             catch (Exception ex)
             {
                 await DisplayAlert("Erro", ex.Message, "Ok");
-                //Debug.WriteLine("Unable to get location, may need to increase timeout: " + ex);
                 throw;
             }
 
