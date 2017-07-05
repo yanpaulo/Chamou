@@ -10,7 +10,7 @@ namespace Chamou.TcpProxy
 {
     public class ClientManager
     {
-        private ConcurrentDictionary<int, TcpClient> clients = new ConcurrentDictionary<int, TcpClient>();
+        private ConcurrentDictionary<string, TcpClient> clients = new ConcurrentDictionary<string, TcpClient>();
         private static ClientManager _instance;
 
         private ClientManager() { }
@@ -18,7 +18,7 @@ namespace Chamou.TcpProxy
         public static ClientManager Instance =>
             _instance ?? (_instance = new ClientManager());
 
-        internal void AddClient(TcpClient client, int clientId)
+        internal void AddClient(TcpClient client, string clientId)
         {
             if (clients.ContainsKey(clientId))
             {
@@ -28,10 +28,10 @@ namespace Chamou.TcpProxy
             clients[clientId] = client;
         }
 
-        public bool IsClientAvailable(int clientId) =>
+        public bool IsClientAvailable(string clientId) =>
             clients.ContainsKey(clientId) && clients[clientId].Connected;
 
-        public bool SendMessage(int clientId, string data)
+        public bool SendMessage(string clientId, string data)
         {
             TcpClient client;
             if (clients.TryGetValue(clientId, out client))

@@ -84,13 +84,13 @@ namespace Chamou.TcpProxy
                 NetworkStream stream = client.GetStream();
 
                 int i = await stream.ReadAsync(bytes, 0, bytes.Length);
-                data = Encoding.ASCII.GetString(bytes, 0, i);
+                data = Encoding.UTF8.GetString(bytes, 0, i);
+                data = data.Trim();
                 Console.WriteLine("Received: {0}", data);
 
-                data = data.ToUpper().Trim();
                 try
                 {
-                    int clientId = int.Parse(data);
+                    string clientId = data;
                     _tcpManager.AddClient(client, clientId);
                     Console.WriteLine($"Added client {clientId}");
                 }
@@ -153,27 +153,27 @@ namespace Chamou.TcpProxy
                     while ((i = await stream.ReadAsync(bytes, 0, bytes.Length)) > 0)
                     {
                         // Translate data bytes to a ASCII string.
-                        data = Encoding.ASCII.GetString(bytes, 0, i);
+                        data = Encoding.UTF8.GetString(bytes, 0, i);
                         Console.WriteLine("Received from Service: {0}", data);
                         // Process the data sent by the client Service.
                         data = data.Trim();
                         try
                         {
                             var parts = data.Split(new[] { ';' });
-                            int clientId = int.Parse(parts[0]);
+                            string clientId = parts[0];
                             string message = parts[1];
                             string responseMessage;
                             if (_tcpManager.SendMessage(clientId, message))
                             {
                                 responseMessage = $"Sent message '{message}' to client {clientId}\r\n";
                                 Console.WriteLine(responseMessage);
-                                await stream.WriteAsync(Encoding.ASCII.GetBytes(responseMessage), 0, responseMessage.Length);
+                                await stream.WriteAsync(Encoding.UTF8.GetBytes(responseMessage), 0, responseMessage.Length);
                             }
                             else
                             {
                                 responseMessage = $"Error: Client {clientId} not found\r\n";
                                 Console.WriteLine(responseMessage);
-                                await stream.WriteAsync(Encoding.ASCII.GetBytes(responseMessage), 0, responseMessage.Length);
+                                await stream.WriteAsync(Encoding.UTF8.GetBytes(responseMessage), 0, responseMessage.Length);
                             }
                             
                         }
